@@ -16,6 +16,11 @@ export class StocksController {
     return this.stocksService.listStocks();
   }
 
+  @Get("sectors")
+  async sectors() {
+    return this.stocksService.listSectors();
+  }
+
   @Get(":ticker")
   async detail(@Param("ticker") ticker: string) {
     try {

@@ -34,4 +34,15 @@ export class StocksService {
     const data = await this.proxy<{ success: boolean; data: unknown }>(`/stocks/${ticker}`);
     return data.data;
   }
+
+  /** Daftar sektor unik (untuk dropdown screener). */
+  async listSectors() {
+    try {
+      const data = await this.proxy<{ success: boolean; data: unknown }>("/screen/sectors");
+      return data.data;
+    } catch (err) {
+      this.logger.error(`Gagal ambil sektor: ${(err as Error).message}`);
+      return [];
+    }
+  }
 }

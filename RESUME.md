@@ -12,7 +12,7 @@
 |---|---|
 | 🎯 Fase aktif | **Phase 1 — Foundation (Bulan 1-3)** |
 | 📊 Progres keseluruhan (roadmap 12 bulan) | **~6%** |
-| 🏁 Milestone terdekat | **Week 1-2**: Setup repo + Database schema + Auth dasar |
+| 🏁 Milestone terdekat | **Screener MVP LIVE** 🎉 (Week 11-12 selesai) — berikutnya: Admin Panel (W7-8), Redis cache (W10) |
 | 🗂 Repositori git | ✅ Terinisialisasi (branch `main`, commit awal dibuat) |
 | ☁️ Remote (GitHub) | ✅ **Terhubung & ter-push** → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) || 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
 | 📓 Sistem resume otomatis | ✅ `scripts/resume.sh` + post-commit hook |
@@ -28,7 +28,7 @@
   - [x] CI/CD GitHub Actions (scaffold) + VS Code config + git hooks
   - [x] Git init + commit awal
 
-- [ ] **Phase 1 — Foundation (Bulan 1-3)** — target: fitur Screener LIVE
+- [ ] **Phase 1 — Foundation (Bulan 1-3)** — 🏁 **Screener MVP LIVE** (milestone tercapai! 🎉) — lanjut ke Admin Panel (W7-8) & cache Redis (W10)
   - [ ] **Week 1**: Setup tools + Docker Compose jalan (`docker compose up -d`)
   - [ ] **Week 2**: Auth module (register/login/JWT) + Users module
   - [ ] **Week 3**: Frontend foundation (Next.js + Tailwind + shadcn/ui) + auth pages + dashboard
@@ -60,9 +60,9 @@
 
 ## ⏭️ Langkah Selanjutnya (Next Actions)
 
-1. **Aktifkan pnpm + install deps** — `corepack enable && pnpm install` (di root)
-2. **Jalankan infrastruktur** — `cp .env.example .env` lalu `docker compose up -d` (MySQL + Redis)
-3. **Migrasi database** — `cp apps/api/.env.example apps/api/.env` → `pnpm db:migrate` (Prisma schema → MySQL)
+1. **Admin panel Refine** (W7-8): CRUD providers/keys/models via API — sekarang AI config masih lewat env/.py
+2. **Redis cache** (W10): pindahkan disk cache stock ke Redis + cache screener
+3. **Analisis Emiten** (W13-14): halaman analisis 1 saham + save history
 4. **Push ke GitHub** — buat repo di GitHub, lalu:
    `./scripts/setup-git.sh --remote https://github.com/<USER>/4igeneration.git` dan `git push -u origin main`
 5. **Implementasi Auth** (Week 2 roadmap): register/login/JWT di `apps/api/src/modules/auth/` + Prisma User
@@ -74,6 +74,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-09 | feat: Screener MVP LIVE 🏁 (Week 11-12) — filter fundamental IDX + skor kualitas + AI summary, fallback demo saat rate-limit, halaman /screener | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: stock data (Week 9-10) — yfinance fetcher, IDX list, API /stocks, analisis AI berbasis data nyata, halaman market | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: koneksikan AI Gateway — Gemini + OpenRouter API keys, model gemini-flash-latest, fallback logic teruji end-to-end | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: design system cosmic (Week 4) — komponen NeonCard/StatusOrb/ParticleField/AIResponseCard, landing cosmic, dokumentasi USAGE.md lengkap | ✅ Selesai | auto (post-commit hook) |

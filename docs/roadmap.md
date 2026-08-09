@@ -37,12 +37,12 @@
 - [x] **W9** Import IDX stock list ✅ *(28 saham likuid via FastAPI /stocks)*
 - [ ] **W10** Cache strategy (Redis)
 - [x] **W10** Stock data API endpoints ✅ *(NestJS /stocks + FastAPI internal, analisis AI berbasis data nyata)*
-- [ ] **W11** Prompt template screening
-- [ ] **W11** Screener UI (form + results)
-- [ ] **W12** AI Gateway integration + filter logic
-- [ ] **W12** Testing & polish
+- [x] **W11** Prompt template screening ✅ *(prompt AI summary top picks)*
+- [x] **W11** Screener UI (form + results) ✅ *(halaman /screener — filter, tabel, AI summary)*
+- [x] **W12** AI Gateway integration + filter logic ✅ *(data-driven filter + skor kualitas + AI)*
+- [x] **W12** Testing & polish ✅ *(teruji end-to-end: 28 saham, data live + demo fallback)*
 
-> 🏁 **MILESTONE: First feature LIVE!**
+> 🏁 **MILESTONE: First feature LIVE! 🎉**
 
 ## 🟡 PHASE 2: MONETIZATION (Bulan 4-6)
 

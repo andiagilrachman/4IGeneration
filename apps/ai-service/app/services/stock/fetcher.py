@@ -1,22 +1,32 @@
-"""4IGeneration — Stock Data Fetcher (yfinance).
+"""4IGeneration — Stock Data Fetcher (yfinance) + cache + retry.
 
 Mengambil data saham IDX nyata dari Yahoo Finance.
 Ticker IDX di yfinance pakai suffix ".JK" (mis. "BBCA" → "BBCA.JK").
 
+Ketahanan:
+- Retry dengan backoff eksponensial (Yahoo sering rate-limit 429)
+- Disk cache per ticker (TTL 12 jam) — cepat & hemat request
+
 Referensi blueprint:
 - BAGIAN 11: Yahoo Finance via yfinance (free) — best for historical prices
 - BAGIAN 8.5: Stock data endpoints
+- Week 10 roadmap: cache strategy (Redis menyusul, ini versi file-based)
 """
 
 from __future__ import annotations
 
 import logging
+import time
 from dataclasses import dataclass, field
 from typing import Any
+
+from app.services.stock import cache as stock_cache
 
 logger = logging.getLogger(__name__)
 
 IDX_SUFFIX = ".JK"
+MAX_RETRIES = 3
+RETRY_DELAYS = [2.0, 5.0, 10.0]
 
 # Daftar saham IDX likuid (contoh — untuk screener & watchlist).
 # TODO (Week 9-10 lanjutan): import daftar lengkap dari IDX.
@@ -99,60 +109,89 @@ class StockData:
         if self.week52_high and self.week52_low:
             lines.append(f"Range 52 minggu: {self.week52_low:,.0f} - {self.week52_high:,.0f}")
         if self.history:
-            last = self.history[-1]
             lines.append(
-                f"Harga penutupan 5 hari terakhir: "
+                "Harga penutupan 5 hari terakhir: "
                 + ", ".join(f"{h['date']}={h['close']:,.0f}" for h in self.history)
             )
         return "\n".join(lines)
 
 
-def get_stock_data(ticker: str, period: str = "5d") -> StockData | None:
-    """Ambil profil + harga saham. None bila gagal (mis. ticker tidak valid)."""
+def _stock_to_dict(data: StockData) -> dict[str, Any]:
+    return data.__dict__
+
+
+def _stock_from_dict(payload: dict[str, Any]) -> StockData:
+    return StockData(**payload)
+
+
+def _fetch_once(ticker: str, period: str = "5d") -> StockData | None:
+    """Fetch satu kali tanpa cache/retry."""
     import yfinance as yf
     from datetime import datetime, timezone
 
     jk = _to_jk(ticker)
-    try:
-        t = yf.Ticker(jk)
-        info = t.info or {}
-        hist = t.history(period=period)
+    t = yf.Ticker(jk)
+    info = t.info or {}
+    hist = t.history(period=period)
 
-        data = StockData(
-            ticker=ticker.strip().upper().removesuffix(IDX_SUFFIX),
-            name=info.get("longName") or info.get("shortName"),
-            sector=info.get("sector"),
-            industry=info.get("industry"),
-            currency=info.get("currency"),
-            price=info.get("currentPrice") or info.get("regularMarketPrice"),
-            market_cap=info.get("marketCap"),
-            trailing_pe=info.get("trailingPE"),
-            forward_pe=info.get("forwardPE"),
-            roe=info.get("returnOnEquity"),
-            debt_to_equity=info.get("debtToEquity"),
-            revenue_growth=info.get("revenueGrowth"),
-            profit_margin=info.get("profitMargins"),
-            week52_high=info.get("fiftyTwoWeekHigh"),
-            week52_low=info.get("fiftyTwoWeekLow"),
-            fetched_at=datetime.now(timezone.utc).isoformat(),
-        )
+    data = StockData(
+        ticker=ticker.strip().upper().removesuffix(IDX_SUFFIX),
+        name=info.get("longName") or info.get("shortName"),
+        sector=info.get("sector"),
+        industry=info.get("industry"),
+        currency=info.get("currency"),
+        price=info.get("currentPrice") or info.get("regularMarketPrice"),
+        market_cap=info.get("marketCap"),
+        trailing_pe=info.get("trailingPE"),
+        forward_pe=info.get("forwardPE"),
+        roe=info.get("returnOnEquity"),
+        debt_to_equity=info.get("debtToEquity"),
+        revenue_growth=info.get("revenueGrowth"),
+        profit_margin=info.get("profitMargins"),
+        week52_high=info.get("fiftyTwoWeekHigh"),
+        week52_low=info.get("fiftyTwoWeekLow"),
+        fetched_at=datetime.now(timezone.utc).isoformat(),
+    )
 
-        if hist is not None and not hist.empty:
-            for idx, row in hist.tail(5).iterrows():
-                data.history.append(
-                    {
-                        "date": idx.strftime("%Y-%m-%d"),
-                        "open": float(row["Open"]),
-                        "high": float(row["High"]),
-                        "low": float(row["Low"]),
-                        "close": float(row["Close"]),
-                        "volume": int(row["Volume"]),
-                    }
-                )
+    if hist is not None and not hist.empty:
+        for idx, row in hist.tail(5).iterrows():
+            data.history.append(
+                {
+                    "date": idx.strftime("%Y-%m-%d"),
+                    "open": float(row["Open"]),
+                    "high": float(row["High"]),
+                    "low": float(row["Low"]),
+                    "close": float(row["Close"]),
+                    "volume": int(row["Volume"]),
+                }
+            )
 
-        if data.price is None and not data.history:
-            return None
-        return data
-    except Exception as exc:  # noqa: BLE001
-        logger.warning("Gagal fetch data %s: %s", jk, exc)
+    if data.price is None and not data.history:
         return None
+    return data
+
+
+def get_stock_data(ticker: str, period: str = "5d") -> StockData | None:
+    """Ambil profil + harga saham — dengan cache dulu, lalu retry backoff."""
+    # 1) coba cache
+    cached = stock_cache.get_cached(ticker)
+    if cached:
+        return _stock_from_dict(cached)
+
+    # 2) fetch dengan retry
+    last_error: Exception | None = None
+    for attempt in range(MAX_RETRIES):
+        try:
+            data = _fetch_once(ticker, period)
+            if data:
+                stock_cache.set_cached(ticker, _stock_to_dict(data))
+                return data
+            return None  # ticker tidak valid
+        except Exception as exc:  # noqa: BLE001
+            last_error = exc
+            logger.warning("Fetch %s attempt %d gagal: %s", ticker, attempt + 1, exc)
+            if attempt < MAX_RETRIES - 1:
+                time.sleep(RETRY_DELAYS[attempt])
+
+    logger.error("Gagal fetch %s setelah %d percobaan: %s", ticker, MAX_RETRIES, last_error)
+    return None

@@ -211,6 +211,10 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 | PUT | `/users/profile` | 🔒 | Update profil (name/fullName) |
 | GET | `/stocks` | — | Daftar saham IDX likuid (28 saham) |
 | GET | `/stocks/:ticker` | — | Data saham nyata (harga, PE, ROE, range 52w, 5 hari) |
+| GET | `/stocks/sectors` | — | Daftar sektor unik (dropdown screener) |
+| POST | `/analysis/screener` | — | **AI-powered screener** (filter fundamental + opsi analisis AI) |
+| POST | `/analysis/stock` | — | Analisis 1 saham berbasis data nyata |
+| GET | `/analysis/health` | — | Status module analysis |
 
 **AI Service (internal, prefix `/internal/v1`):**
 
@@ -218,8 +222,23 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 |---|---|---|
 | GET | `/stocks` | Daftar saham IDX (sumber: FastAPI) |
 | GET | `/stocks/:ticker` | Data saham mentah (yfinance) |
+| POST | `/screen` | **Screener** (kriteria + opsi `analyze`) |
+| GET | `/screen/sectors` | Daftar sektor unik |
 | POST | `/analyze/stock` | Analisis AI **berbasis data nyata** |
 | GET | `/health` · `/providers/status` | Health & status provider |
+
+### ⚡ Cara pakai Screener (fitur pertama 🏁)
+1. Buka **http://localhost:3000/screener** (dari dashboard klik **🔍 Screener**)
+2. Isi filter: sektor, max P/E, min ROE (%), maks hasil — centang **Analisis AI** untuk rangkuman
+3. Klik **🚀 Jalankan** → tabel hasil diurutkan skor kualitas + AI summary
+4. Badge **LIVE** = data real-time Yahoo · **DEMO** = fallback saat Yahoo rate-limited
+
+Contoh curl:
+```bash
+curl -X POST http://localhost:3001/api/v1/analysis/screener \
+  -H "Content-Type: application/json" \
+  -d '{"min_roe":0.15,"limit":10,"analyze":true}'
+```
 
 ### ⏳ Rencana (blueprint BAGIAN 8 — belum dibuat)
 
