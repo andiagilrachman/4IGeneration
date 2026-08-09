@@ -1,0 +1,31 @@
+{
+  "name": "4igeneration",
+  "version": "0.1.0",
+  "private": true,
+  "description": "4IGeneration v2.0 — AI Intelligence Platform for Smart Investing (Next.js + NestJS + FastAPI + Refine, monorepo)",
+  "packageManager": "pnpm@9.15.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "test": "turbo run test",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "resume": "./scripts/resume.sh",
+    "db:generate": "pnpm --filter @4ig/api prisma generate",
+    "db:migrate": "pnpm --filter @4ig/api prisma migrate dev",
+    "db:studio": "pnpm --filter @4ig/api prisma studio",
+    "ai:dev": "cd apps/ai-service && uvicorn app.main:app --reload --port 8000",
+    "hooks:install": "./scripts/install-hooks.sh",
+    "hooks:remove": "rm -f .git/hooks/post-commit && echo 'post-commit hook dihapus'"
+  },
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "turbo": "^2.3.3"
+  }
+}

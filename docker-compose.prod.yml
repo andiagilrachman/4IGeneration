@@ -1,0 +1,104 @@
+# ============================================================
+# 4IGeneration — Docker Compose (Production, single VPS)
+# Fase 1 deployment sesuai BAGIAN 13. Tambahkan Let's Encrypt
+# via Certbot + Cloudflare di depan untuk CDN/WAF.
+# ============================================================
+name: 4igeneration-prod
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: 4ig-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-4igeneration}
+      MYSQL_USER: ${MYSQL_USER:-4ig}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      TZ: ${TZ:-Asia/Makassar}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    # Production: JANGAN expose port 3306 ke publik
+
+  redis:
+    image: redis:7-alpine
+    container_name: 4ig-redis
+    restart: unless-stopped
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
+    volumes:
+      - redis_data:/data
+
+  nginx:
+    image: nginx:alpine
+    container_name: 4ig-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.prod.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/certs:/etc/letsencrypt:ro
+    depends_on:
+      - web
+      - api
+      - admin
+      - ai-service
+
+  web:
+    build:
+      context: ./apps/web
+      args:
+        NEXT_PUBLIC_API_URL: https://api.4igeneration.com
+    container_name: 4ig-web
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+
+  api:
+    build:
+      context: ./apps/api
+    container_name: 4ig-api
+    restart: unless-stopped
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      DATABASE_URL: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@mysql:3306/${MYSQL_DATABASE}
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      AI_SERVICE_URL: http://ai-service:8000
+      JWT_SECRET: ${JWT_SECRET}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY}
+      RESEND_API_KEY: ${RESEND_API_KEY}
+      MIDTRANS_SERVER_KEY: ${MIDTRANS_SERVER_KEY}
+      MIDTRANS_CLIENT_KEY: ${MIDTRANS_CLIENT_KEY}
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  admin:
+    build:
+      context: ./apps/admin
+    container_name: 4ig-admin
+    restart: unless-stopped
+
+  ai-service:
+    build:
+      context: ./apps/ai-service
+    container_name: 4ig-ai-service
+    restart: unless-stopped
+    environment:
+      APP_ENV: production
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      GROQ_API_KEY: ${GROQ_API_KEY}
+      MISTRAL_API_KEY: ${MISTRAL_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+
+volumes:
+  mysql_data:
+  redis_data:

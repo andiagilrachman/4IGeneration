@@ -1,0 +1,7 @@
+{
+  "extends": "@4ig/tsconfig/base.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["src"]
+}
