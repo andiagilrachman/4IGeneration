@@ -27,10 +27,11 @@
 - [x] **W5** AI Gateway (provider abstraction + fallback + circuit breaker) ✅ *(teruji: Gemini primary, OpenRouter fallback)*
 - [x] **W5** Test dengan provider nyata ✅ *(Gemini + OpenRouter terhubung & teruji)*
 - [x] **W6** Health check endpoints ✅ *(/internal/v1/health + /providers/status)*
-- [ ] **W7** Refine.dev setup ✅ *(scaffold sudah dibuat)*
-- [ ] **W7** Providers CRUD + provider keys CRUD
-- [ ] **W8** Models CRUD + settings management
-- [ ] **W8** Basic dashboard admin
+- [x] **W7** Admin panel setup ✅ *(Vite+AntD — login, layout, menu)*
+- [x] **W7** Providers CRUD + provider keys CRUD ✅ *(via API admin + UI)*
+- [x] **W8** Models CRUD + dashboard ✅ *(model + alias 4IG-* + harga; stats)*
+- [ ] **W8** Settings management *(fase lanjut: settings, feature-flags, prompts)*
+- [ ] **W8** Migrasi Refine.dev *(rencana — versi kini AntD langsung agar cepat)*
 
 ### Bulan 3 — MVP Feature A: Stock Screener
 - [x] **W9** Stock data fetcher (yfinance) ✅ *(fetcher.py — profil + harga nyata, teruji BBCA/TLKM)*

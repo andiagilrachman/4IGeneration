@@ -6,6 +6,7 @@ import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
 import { StocksModule } from "./modules/stocks/stocks.module";
 import { AnalysisModule } from "./modules/analysis/analysis.module";
+import { AdminModule } from "./modules/admin/admin.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AnalysisModule } from "./modules/analysis/analysis.module";
     UsersModule,
     StocksModule,
     AnalysisModule,
+    AdminModule,
   ],
   controllers: [AppController],
 })

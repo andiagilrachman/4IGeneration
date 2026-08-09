@@ -74,6 +74,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-09 | feat: admin panel (W7-8) — CRUD AI providers/models/keys via UI (AntD), role guard ADMIN, seed admin, CORS multi-origin, dashboard stats | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: Screener MVP LIVE 🏁 (Week 11-12) — filter fundamental IDX + skor kualitas + AI summary, fallback demo saat rate-limit, halaman /screener | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: stock data (Week 9-10) — yfinance fetcher, IDX list, API /stocks, analisis AI berbasis data nyata, halaman market | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: koneksikan AI Gateway — Gemini + OpenRouter API keys, model gemini-flash-latest, fallback logic teruji end-to-end | ✅ Selesai | auto (post-commit hook) |

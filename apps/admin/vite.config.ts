@@ -7,5 +7,7 @@ export default defineConfig({
   server: {
     port: 3002,
     host: "0.0.0.0",
+    // izinkan host preview (e2b.app) agar live preview berfungsi
+    allowedHosts: true,
   },
 });

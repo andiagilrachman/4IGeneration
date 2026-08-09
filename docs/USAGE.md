@@ -17,11 +17,12 @@
 7. [Format Respons API](#7-format-respons-api)
 8. [Design System Cosmic](#8-design-system-cosmic)
 9. [AI Service & API Keys](#9-ai-service--api-keys)
-10. [Git Workflow & Backup](#10-git-workflow--backup)
-11. [Script Utility](#11-script-utility)
-12. [Resume Progres Otomatis](#12-resume-progres-otomatis)
-13. [Troubleshooting](#13-troubleshooting)
-14. [Status Roadmap](#14-status-roadmap)
+10. [Admin Panel](#10-admin-panel)
+11. [Git Workflow & Backup](#11-git-workflow--backup)
+12. [Script Utility](#12-script-utility)
+13. [Resume Progres Otomatis](#13-resume-progres-otomatis)
+14. [Troubleshooting](#14-troubleshooting)
+15. [Status Roadmap](#15-status-roadmap)
 
 ---
 
@@ -374,7 +375,51 @@ curl -X POST http://localhost:8000/internal/v1/analyze/stock \
 
 ---
 
-## 10. Git Workflow & Backup
+## 10. Admin Panel
+
+**URL:** http://localhost:3002 · **Teknologi:** Vite + React + Ant Design
+
+> Catatan: sesuai prinsip blueprint "no hardcode" — provider, model, dan API keys
+> dikelola **dari UI admin**, bukan dari kode/env. (Refine.dev dijadwalkan sebagai
+> pengganti bertahap; versi ini AntD langsung agar cepat berfungsi.)
+
+### Login
+| Field | Nilai (seed default) |
+|---|---|
+| Email | `admin@4igeneration.com` |
+| Password | `admin12345` |
+
+**Ubah password:** seed ulang dengan env berbeda, atau ganti di DB. Jangan biarkan default di production!
+```bash
+# seed ulang admin dengan password baru
+cd apps/api && DATABASE_URL="mysql://..." ADMIN_PASSWORD="password-kuat" pnpm seed:admin
+```
+
+### Menu & Fitur
+| Menu | Fungsi | Endpoint API |
+|---|---|---|
+| 📊 Dashboard | Statistik: providers, keys, models, users + provider aktif | `GET /admin/dashboard/stats` |
+| 🤖 AI Providers | CRUD provider (slug, base URL, priority, weight, timeout) | `/admin/providers*` |
+| 🧠 AI Models | CRUD model + alias 4IG-* + harga per 1K token | `/admin/models*` |
+| 🔑 Provider Keys | CRUD key pool + status (aktif/nonaktif/cooldown) + limit | `/admin/provider-keys*` |
+
+### Keamanan
+- Semua route admin butuh **JWT + role ADMIN/SUPER_ADMIN** (user biasa → `403`)
+- Key tersimpan di DB; TODO fase lanjut: enkripsi AES-256 sebelum simpan
+- CORS: API mengizinkan origin `:3000` & `:3002` (override via `CORS_ORIGINS`)
+
+### Uji cepat (curl)
+```bash
+# login admin
+curl -X POST localhost:3001/api/v1/auth/login -H "Content-Type: application/json" \
+  -d '{"email":"admin@4igeneration.com","password":"admin12345"}'
+# → simpan accessToken, lalu:
+curl localhost:3001/api/v1/admin/providers -H "Authorization: Bearer <TOKEN>"
+```
+
+---
+
+## 11. Git Workflow & Backup
 
 > **Prinsip kerja:** setiap pekerjaan selesai → **commit + push ke GitHub langsung** (backup otomatis, sesuai kesepakatan).
 
