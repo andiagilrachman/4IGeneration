@@ -14,9 +14,9 @@
 - [x] **W2** Auth module (register/login) + JWT ✅ *(register, login, refresh, logout, me — teruji end-to-end)*
 - [x] **W2** Users module ✅ *(GET/PUT profile — teruji)*
 - [ ] **W3** Next.js + TypeScript ✅ *(scaffold sudah dibuat)*
-- [ ] **W3** Tailwind + shadcn/ui
-- [ ] **W3** Auth pages (login/register/forgot)
-- [ ] **W3** Dashboard skeleton
+- [ ] **W3** Tailwind + shadcn/ui ✅ *(Tailwind + design tokens cosmic sudah)*
+- [x] **W3** Auth pages (login/register/forgot) ✅ *(login + register terhubung API + proteksi route middleware)*
+- [x] **W3** Dashboard skeleton ✅ *(menampilkan user asli + logout)*
 - [ ] **W4** Cosmic color system ✅ *(tokens sudah di globals.css/tailwind)*
 - [ ] **W4** Cosmic components (NeonCard, StatusOrb, dst)
 - [ ] **W4** Landing page basic

@@ -1,8 +1,8 @@
 "use client";
 
 /**
- * Halaman Login — terhubung ke POST /api/v1/auth/login.
- * Tier 3: minimal cosmic. Form state manual + error handling.
+ * Halaman Register — terhubung ke POST /api/v1/auth/register.
+ * Password min 8 karakter (sesuai validasi API).
  */
 
 import { useState } from "react";
@@ -10,9 +10,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const router = useRouter();
-  const login = useAuthStore((s) => s.login);
+  const register = useAuthStore((s) => s.register);
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -21,12 +22,16 @@ export default function LoginPage() {
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
+    if (password.length < 8) {
+      setError("Password minimal 8 karakter");
+      return;
+    }
     setLoading(true);
     try {
-      await login(email, password);
+      await register(email, password, name || undefined);
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Gagal masuk. Coba lagi.");
+      setError(err instanceof Error ? err.message : "Gagal daftar. Coba lagi.");
     } finally {
       setLoading(false);
     }
@@ -35,8 +40,8 @@ export default function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center bg-bg-deep bg-cosmic-radial px-6">
       <div className="glass-panel w-full max-w-sm p-8">
-        <h1 className="font-display text-2xl font-bold">Masuk</h1>
-        <p className="mt-1 text-sm text-text-muted">4IGeneration — AI Intelligence Platform</p>
+        <h1 className="font-display text-2xl font-bold">Daftar Akun</h1>
+        <p className="mt-1 text-sm text-text-muted">Mulai analisis saham dengan AI</p>
 
         {error && (
           <div className="mt-4 rounded-lg border border-error/30 bg-error/10 px-4 py-2.5 text-sm text-error">
@@ -45,6 +50,18 @@ export default function LoginPage() {
         )}
 
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
+          <div>
+            <label htmlFor="name" className="mb-1 block text-sm text-text-secondary">
+              Nama (opsional)
+            </label>
+            <input
+              id="name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="w-full rounded-lg border border-white/10 bg-bg-base px-4 py-2.5 text-sm outline-none focus:border-primary"
+            />
+          </div>
           <div>
             <label htmlFor="email" className="mb-1 block text-sm text-text-secondary">
               Email
@@ -66,24 +83,26 @@ export default function LoginPage() {
               id="password"
               type="password"
               required
+              minLength={8}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full rounded-lg border border-white/10 bg-bg-base px-4 py-2.5 text-sm outline-none focus:border-primary"
             />
+            <p className="mt-1 text-xs text-text-disabled">Minimal 8 karakter</p>
           </div>
           <button
             type="submit"
             disabled={loading}
             className="w-full rounded-lg bg-primary py-2.5 font-semibold text-white shadow-glow-purple transition-colors hover:bg-primary-hover disabled:opacity-60"
           >
-            {loading ? "Memproses..." : "Masuk"}
+            {loading ? "Mendaftarkan..." : "Daftar"}
           </button>
         </form>
 
         <p className="mt-6 text-center text-sm text-text-muted">
-          Belum punya akun?{" "}
-          <Link href="/register" className="text-highlight hover:underline">
-            Daftar
+          Sudah punya akun?{" "}
+          <Link href="/login" className="text-highlight hover:underline">
+            Masuk
           </Link>
         </p>
       </div>
