@@ -8,10 +8,12 @@ pydantic-settings==2.5.2
 httpx==0.27.2
 python-dotenv==1.0.1
 
-# --- Fase 2+ (uncomment saat implementasi fitur lanjutan) ---
+# --- Fase 2: Stock Data (Week 9-10) ---
+yfinance==0.2.54                # Data saham (Yahoo Finance)
+
+# --- Fase 3+ (uncomment saat implementasi fitur lanjutan) ---
 # litellm==1.44.0                 # AI Gateway unified
 # langchain==0.3.0                # Orchestrasi prompt
-# yfinance==0.2.43                # Data saham
 # pandas==2.2.2
 # beautifulsoup4==4.12.3          # Scraping berita
 # chromadb==0.5.5                 # Vector DB (RAG, bulan 6)

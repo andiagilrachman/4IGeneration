@@ -209,13 +209,25 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 | GET | `/auth/me` | 🔒 | Data user saat ini |
 | GET | `/users/profile` | 🔒 | Profil lengkap user |
 | PUT | `/users/profile` | 🔒 | Update profil (name/fullName) |
+| GET | `/stocks` | — | Daftar saham IDX likuid (28 saham) |
+| GET | `/stocks/:ticker` | — | Data saham nyata (harga, PE, ROE, range 52w, 5 hari) |
+
+**AI Service (internal, prefix `/internal/v1`):**
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `/stocks` | Daftar saham IDX (sumber: FastAPI) |
+| GET | `/stocks/:ticker` | Data saham mentah (yfinance) |
+| POST | `/analyze/stock` | Analisis AI **berbasis data nyata** |
+| GET | `/health` · `/providers/status` | Health & status provider |
 
 ### ⏳ Rencana (blueprint BAGIAN 8 — belum dibuat)
 
-- `/stocks*` (data saham), `/analysis*` (analisis AI), `/watchlists*`
-- `/subscriptions*`, `/plans*`, `/payments*`, `/credits*`
+- `/stocks/:ticker/prices` · `/fundamentals` · `/news` · `/technicals` (fase lanjut)
+- `/analysis/*` lengkap (compare, screener, sentiment, chat, market-recap)
+- `/watchlists*`, `/subscriptions*`, `/plans*`, `/payments*`, `/credits*`
 - `/api-keys*`, `/usage*`, `/admin/*`, `/playground/*`
-- AI Service: `/internal/v1/generate`, `/analyze/stock`, `/health`, `/providers/status`
+- AI Service: `/internal/v1/generate`, `/analyze/sentiment`, `/screen`, `/summarize`
 
 > Seluruh endpoint di atas akan ditambahkan bertahap sesuai roadmap. Lihat `docs/roadmap.md`.
 

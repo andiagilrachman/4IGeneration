@@ -4,6 +4,7 @@ import { AppController } from "./app.controller";
 import { PrismaModule } from "./prisma/prisma.module";
 import { AuthModule } from "./modules/auth/auth.module";
 import { UsersModule } from "./modules/users/users.module";
+import { StocksModule } from "./modules/stocks/stocks.module";
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from "./modules/users/users.module";
     // UsageModule, SettingsModule, PromptsModule, AuditModule, NotificationsModule, ...
     AuthModule,
     UsersModule,
+    StocksModule,
   ],
   controllers: [AppController],
 })

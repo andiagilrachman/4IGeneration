@@ -6,6 +6,7 @@
  */
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useAuthStore } from "@/store/auth-store";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -53,9 +54,14 @@ export default function DashboardPage() {
               Selamat datang, <span className="text-highlight">{user.name ?? user.email}</span> 👋
             </p>
           </div>
-          <Button variant="danger" onClick={handleLogout}>
-            Keluar
-          </Button>
+          <div className="flex gap-3">
+            <Link href="/market">
+              <Button variant="outline">📈 Market</Button>
+            </Link>
+            <Button variant="danger" onClick={handleLogout}>
+              Keluar
+            </Button>
+          </div>
         </div>
 
         {/* Status bar */}

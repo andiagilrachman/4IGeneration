@@ -33,10 +33,10 @@
 - [ ] **W8** Basic dashboard admin
 
 ### Bulan 3 — MVP Feature A: Stock Screener
-- [ ] **W9** Stock data fetcher (yfinance)
-- [ ] **W9** Import IDX stock list
+- [x] **W9** Stock data fetcher (yfinance) ✅ *(fetcher.py — profil + harga nyata, teruji BBCA/TLKM)*
+- [x] **W9** Import IDX stock list ✅ *(28 saham likuid via FastAPI /stocks)*
 - [ ] **W10** Cache strategy (Redis)
-- [ ] **W10** Stock data API endpoints
+- [x] **W10** Stock data API endpoints ✅ *(NestJS /stocks + FastAPI internal, analisis AI berbasis data nyata)*
 - [ ] **W11** Prompt template screening
 - [ ] **W11** Screener UI (form + results)
 - [ ] **W12** AI Gateway integration + filter logic
