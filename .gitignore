@@ -49,3 +49,7 @@ apps/api/prisma/migrations/dev/
 # === Docker ===
 mysql_data/
 redis_data/
+
+# Stock cache (disk fallback — sementara pre-Redis)
+.stock_cache/
+*.stock_cache/

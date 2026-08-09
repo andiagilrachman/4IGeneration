@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 
 IDX_SUFFIX = ".JK"
 MAX_RETRIES = 3
-RETRY_DELAYS = [2.0, 5.0, 10.0]
+RETRY_DELAYS = [1.0, 2.0, 3.0]  # cepat: screener fail-fast ke demo bila rate-limit
 
 # Daftar saham IDX likuid (contoh — untuk screener & watchlist).
 # TODO (Week 9-10 lanjutan): import daftar lengkap dari IDX.
@@ -189,9 +189,21 @@ def get_stock_data(ticker: str, period: str = "5d") -> StockData | None:
             return None  # ticker tidak valid
         except Exception as exc:  # noqa: BLE001
             last_error = exc
+            # Rate-limit: retry tidak membantu (masih 429) → langsung berhenti
+            if _is_rate_limit(exc):
+                logger.warning("Fetch %s rate-limited (429) — skip retry", ticker)
+                break
             logger.warning("Fetch %s attempt %d gagal: %s", ticker, attempt + 1, exc)
             if attempt < MAX_RETRIES - 1:
                 time.sleep(RETRY_DELAYS[attempt])
 
     logger.error("Gagal fetch %s setelah %d percobaan: %s", ticker, MAX_RETRIES, last_error)
     return None
+
+
+def _is_rate_limit(exc: Exception) -> bool:
+    """Deteksi error rate-limit (yfinance YFRateLimitError / pesan 429)."""
+    if exc.__class__.__name__ == "YFRateLimitError":
+        return True
+    msg = str(exc).lower()
+    return "too many requests" in msg or "rate limited" in msg or "429" in msg

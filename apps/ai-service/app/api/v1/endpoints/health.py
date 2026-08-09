@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter
 
 from app.services.ai.gateway import get_gateway
+from app.services.cache import redis_cache
 
 router = APIRouter()
 
@@ -19,6 +20,7 @@ async def health() -> dict:
             "status": "ok",
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "providers_configured": len(gateway.providers),
+            "cache": redis_cache.stats(),
         },
     }
 

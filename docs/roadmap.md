@@ -36,7 +36,7 @@
 ### Bulan 3 — MVP Feature A: Stock Screener
 - [x] **W9** Stock data fetcher (yfinance) ✅ *(fetcher.py — profil + harga nyata, teruji BBCA/TLKM)*
 - [x] **W9** Import IDX stock list ✅ *(28 saham likuid via FastAPI /stocks)*
-- [ ] **W10** Cache strategy (Redis)
+- [x] **W10** Cache strategy (Redis) ✅ *(Redis + fallback disk, TTL 12 jam, cache hit 0.019s)*
 - [x] **W10** Stock data API endpoints ✅ *(NestJS /stocks + FastAPI internal, analisis AI berbasis data nyata)*
 - [x] **W11** Prompt template screening ✅ *(prompt AI summary top picks)*
 - [x] **W11** Screener UI (form + results) ✅ *(halaman /screener — filter, tabel, AI summary)*

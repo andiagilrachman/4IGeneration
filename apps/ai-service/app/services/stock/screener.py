@@ -13,11 +13,14 @@ Alur (blueprint BAGIAN 15, Week 11-12 — MVP Feature A):
 from __future__ import annotations
 
 import asyncio
+import logging
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
 from typing import Any
 
 from app.services.stock.fetcher import IDX_STOCKS, get_stock_data
+
+logger = logging.getLogger(__name__)
 
 # concurrency rendah: aman dari rate-limit Yahoo sambil tetap lebih cepat dari sequential
 _executor = ThreadPoolExecutor(max_workers=3)
@@ -83,13 +86,24 @@ def _fetch_all() -> tuple[list[dict[str, Any]], str]:
     """Ambil data semua saham IDX (blokir — dijalankan di thread pool).
 
     Mengembalikan (data, source) — source "live" atau "demo".
-    Bila Yahoo rate-limited (semua gagal), fallback ke data demo berlabel jelas.
+    Fail-fast: bila Yahoo rate-limit beruntun (3+), hentikan fetch dan
+    langsung pakai data demo — supaya screener tidak menggantung berjam-jam.
     """
     results: list[dict[str, Any]] = []
+    consecutive_failures = 0
+
     for item in IDX_STOCKS:
         data = get_stock_data(item["ticker"], period="5d")
         if data is None:
+            consecutive_failures += 1
+            if consecutive_failures >= 3:
+                logger.warning(
+                    "Rate-limit/failure beruntun (%d) — hentikan fetch, pakai demo data",
+                    consecutive_failures,
+                )
+                break
             continue
+        consecutive_failures = 0
         results.append(
             {
                 "ticker": data.ticker,

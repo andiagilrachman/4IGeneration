@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     gateway_timeout_ms: int = 30000
     gateway_max_retries: int = 3
 
+    # Cache (Week 10 — Redis)
+    redis_url: str = "redis://localhost:6379"
+    stock_cache_ttl_seconds: int = 43200  # 12 jam
+
     @property
     def providers_configured(self) -> list[str]:
         """Provider yang punya API key terisi."""

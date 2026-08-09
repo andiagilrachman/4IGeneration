@@ -317,6 +317,13 @@ import { StatusOrb } from "@/components/cosmic/status-orb";
 - Mobile (<768px): ParticleField mati otomatis (CSS `hidden md:block`)
 - `prefers-reduced-motion`: semua animasi dikecilkan (globals.css)
 
+### Cache (Week 10 — Redis)
+- Data saham di-cache di **Redis** (`app/services/cache/redis_cache.py`) — TTL 12 jam
+- Key pattern: `4ig:stock:<TICKER>`
+- **Fallback otomatis ke disk cache** bila Redis mati (resilient)
+- Benchmark screener: **cache miss ~6s → cache hit 0.019s (~300×)**
+- Config: `REDIS_URL` (default `redis://localhost:6379`), `STOCK_CACHE_TTL_SECONDS`
+
 ---
 
 ## 9. AI Service & API Keys
