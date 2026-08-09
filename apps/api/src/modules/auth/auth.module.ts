@@ -1,19 +1,13 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
+import { PassportModule } from "@nestjs/passport";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
+import { AccessTokenStrategy } from "./strategies/access-token.strategy";
 
-/**
- * Auth module — TODO (Week 2 roadmap):
- * - POST /auth/register  (bcrypt hash password)
- * - POST /auth/login     (JWT access + refresh token)
- * - Passport.js JWT strategy + guards
- * - Redis untuk session management
- * - Email verification (Resend)
- * - 2FA TOTP (fase lanjut)
- */
 @Module({
   imports: [
+    PassportModule,
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET ?? "dev-secret",
@@ -21,7 +15,7 @@ import { AuthService } from "./auth.service";
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService],
+  providers: [AuthService, AccessTokenStrategy],
   exports: [AuthService],
 })
 export class AuthModule {}

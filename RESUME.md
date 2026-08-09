@@ -75,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-09 | feat: implement auth module (register, login, refresh, logout, me) + users profile — JWT + bcrypt + prisma migrate init, teruji end-to-end | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | docs: add github-push.sh untuk push ke GitHub dengan PAT | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | fix: valid CSS comments & use client on login page (landing/dashboard/login 200 OK) | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: init 4IGeneration v2 monorepo skeleton (web, api, ai-service, admin + prisma + docker + resume) | ✅ Selesai | auto (post-commit hook) |

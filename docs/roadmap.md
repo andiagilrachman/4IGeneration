@@ -9,10 +9,10 @@
 - [ ] **W1** Monorepo Turborepo ✅ *(scaffold sudah dibuat)*
 - [ ] **W1** GitHub repository + remote origin
 - [ ] **W1** Docker Compose berjalan (MySQL + Redis)
-- [ ] **W2** Prisma & MySQL schema ✅ *(schema awal sudah dibuat)*
+- [ ] **W2** Prisma & MySQL schema ✅ *(schema awal sudah dibuat + migrasi init sukses: 32 tabel)*
 - [ ] **W2** NestJS project ✅ *(scaffold sudah dibuat)*
-- [ ] **W2** Auth module (register/login) + JWT
-- [ ] **W2** Users module
+- [x] **W2** Auth module (register/login) + JWT ✅ *(register, login, refresh, logout, me — teruji end-to-end)*
+- [x] **W2** Users module ✅ *(GET/PUT profile — teruji)*
 - [ ] **W3** Next.js + TypeScript ✅ *(scaffold sudah dibuat)*
 - [ ] **W3** Tailwind + shadcn/ui
 - [ ] **W3** Auth pages (login/register/forgot)

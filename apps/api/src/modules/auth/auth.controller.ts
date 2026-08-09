@@ -1,25 +1,44 @@
-import { Body, Controller, Get, Post } from "@nestjs/common";
+import { Body, Controller, Get, Post, UseGuards } from "@nestjs/common";
+import { CurrentUser } from "../../common/decorators/current-user.decorator";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 import { AuthService } from "./auth.service";
+import { LoginDto } from "./dto/login.dto";
+import { LogoutDto } from "./dto/logout.dto";
+import { RefreshDto } from "./dto/refresh.dto";
+import { RegisterDto } from "./dto/register.dto";
 
+/**
+ * Endpoint auth — sesuai blueprint BAGIAN 8.1:
+ * POST /auth/register · /auth/login · /auth/refresh · /auth/logout
+ * GET  /auth/me (protected)
+ */
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post("register")
-  register(@Body() body: { email: string; password: string; name?: string }) {
-    // TODO (Week 2): validasi Zod/class-validator + simpan user + hash password
-    return this.authService.stubNotImplemented("register");
+  register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto);
   }
 
   @Post("login")
-  login(@Body() body: { email: string; password: string }) {
-    // TODO (Week 2): verifikasi kredensial + issue JWT
-    return this.authService.stubNotImplemented("login");
+  login(@Body() dto: LoginDto) {
+    return this.authService.login(dto);
+  }
+
+  @Post("refresh")
+  refresh(@Body() dto: RefreshDto) {
+    return this.authService.refresh(dto.refreshToken);
+  }
+
+  @Post("logout")
+  logout(@Body() dto: LogoutDto) {
+    return this.authService.logout(dto.refreshToken);
   }
 
   @Get("me")
-  me() {
-    // TODO (Week 2): @UseGuards(JwtAuthGuard) + ambil user dari token
-    return this.authService.stubNotImplemented("me");
+  @UseGuards(JwtAuthGuard)
+  me(@CurrentUser("id") userId: string) {
+    return this.authService.me(userId);
   }
 }
