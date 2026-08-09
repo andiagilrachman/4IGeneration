@@ -14,8 +14,7 @@
 | 📊 Progres keseluruhan (roadmap 12 bulan) | **~6%** |
 | 🏁 Milestone terdekat | **Week 1-2**: Setup repo + Database schema + Auth dasar |
 | 🗂 Repositori git | ✅ Terinisialisasi (branch `main`, commit awal dibuat) |
-| ☁️ Remote (GitHub) | ✅ **Terhubung & ter-push** → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) |
-| 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
+| ☁️ Remote (GitHub) | ✅ **Terhubung & ter-push** → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) || 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
 | 📓 Sistem resume otomatis | ✅ `scripts/resume.sh` + post-commit hook |
 
 ## 📊 Progres per Fase (Roadmap 12 Bulan)
@@ -76,6 +75,7 @@
 
 <!-- LOG-START -->
 | 2026-08-09 | feat: implement auth module (register, login, refresh, logout, me) + users profile — JWT + bcrypt + prisma migrate init, teruji end-to-end | ✅ Selesai | auto (post-commit hook) |
+| 2026-08-09 | Push Auth module ke GitHub | ✅ | commit b8bf4e1 ter-push — 117 file live di repo |
 | 2026-08-09 | docs: add github-push.sh untuk push ke GitHub dengan PAT | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | fix: valid CSS comments & use client on login page (landing/dashboard/login 200 OK) | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: init 4IGeneration v2 monorepo skeleton (web, api, ai-service, admin + prisma + docker + resume) | ✅ Selesai | auto (post-commit hook) |
