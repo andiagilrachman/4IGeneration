@@ -18,8 +18,8 @@
 - [x] **W3** Auth pages (login/register/forgot) ✅ *(login + register terhubung API + proteksi route middleware)*
 - [x] **W3** Dashboard skeleton ✅ *(menampilkan user asli + logout)*
 - [ ] **W4** Cosmic color system ✅ *(tokens sudah di globals.css/tailwind)*
-- [ ] **W4** Cosmic components (NeonCard, StatusOrb, dst)
-- [ ] **W4** Landing page basic
+- [x] **W4** Cosmic components (NeonCard, StatusOrb, ParticleField, AIResponseCard, Button/Input/Card) ✅ *(komponen siap & dipakai)*
+- [x] **W4** Landing page basic ✅ *(hero + fitur + demo AI response, full cosmic)*
 - [ ] **W4** Testing & refinement
 
 ### Bulan 2 — AI Gateway & Admin Panel

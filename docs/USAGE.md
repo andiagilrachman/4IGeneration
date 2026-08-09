@@ -1,0 +1,380 @@
+# 📖 PANDUAN PENGGUNAAN LENGKAP — 4IGeneration v2.0
+
+> **Cara pakai / penggunaan seluruh sistem** — dari setup, menjalankan, autentikasi, API, hingga workflow git & backup.
+> 📌 Dokumen ini **di-update setiap kali ada pekerjaan selesai** (selalu mencerminkan kondisi terkini).
+> Terakhir diperbarui: **2026-08-10**
+
+---
+
+## 📑 Daftar Isi
+
+1. [Ringkasan Sistem](#1-ringkasan-sistem)
+2. [Prasyarat](#2-prasyarat)
+3. [Setup Pertama Kali](#3-setup-pertama-kali)
+4. [Menjalankan Aplikasi](#4-menjalankan-aplikasi)
+5. [Autentikasi — Cara Pakai](#5-autentikasi--cara-pakai)
+6. [Daftar Endpoint API](#6-daftar-endpoint-api)
+7. [Format Respons API](#7-format-respons-api)
+8. [Design System Cosmic](#8-design-system-cosmic)
+9. [Git Workflow & Backup](#9-git-workflow--backup)
+10. [Script Utility](#10-script-utility)
+11. [Resume Progres Otomatis](#11-resume-progres-otomatis)
+12. [Troubleshooting](#12-troubleshooting)
+13. [Status Roadmap](#13-status-roadmap)
+
+---
+
+## 1. Ringkasan Sistem
+
+4IGeneration adalah **AI-native platform analisis & screening saham Indonesia** — monorepo dengan 4 aplikasi:
+
+| Aplikasi | Teknologi | Port | Fungsi |
+|---|---|---|---|
+| `apps/web` | Next.js 14 + Tailwind | **3000** | Frontend pengguna (Cosmic AI Command Center) |
+| `apps/api` | NestJS 10 + Prisma | **3001** | REST API backend (prefix `/api/v1`) |
+| `apps/ai-service` | FastAPI + Python | **8000** | AI Gateway multi-provider (internal) |
+| `apps/admin` | Refine + Ant Design | **3002** | Admin panel (scaffold, diisi Week 7-8) |
+
+**Infrastruktur:** MySQL 8 (database, port 3306) · Redis 7 (cache, port 6379) · Nginx (reverse proxy) · semua via Docker Compose.
+
+```
+Browser / API Client
+   ↓
+ Nginx (reverse proxy)
+   ├→ Web (:3000)  →  halaman pengguna
+   ├→ API (:3001)  →  REST API (auth, users, dst)
+   ├→ Admin (:3002)
+   └→ AI Service (:8000)  →  AI Gateway → Gemini/Groq/Mistral/OpenRouter
+```
+
+---
+
+## 2. Prasyarat
+
+| Tool | Versi | Catatan |
+|---|---|---|
+| Node.js | **20 LTS** | `node -v` |
+| pnpm | **9+** | `corepack enable` lalu `pnpm -v` |
+| Python | **3.11+** | untuk ai-service |
+| Docker + Compose | latest | untuk MySQL/Redis (opsional jika pakai DB lokal) |
+| Git | latest | |
+
+---
+
+## 3. Setup Pertama Kali
+
+### Langkah 1 — Clone & install dependencies
+```bash
+git clone https://github.com/andiagilrachman/4IGeneration.git
+cd 4IGeneration
+corepack enable
+pnpm install          # install semua workspace
+```
+
+### Langkah 2 — Siapkan environment variables
+```bash
+cp .env.example .env                         # root (shared: MySQL, Redis, JWT)
+cp apps/api/.env.example apps/api/.env       # API (DATABASE_URL, JWT secrets)
+cp apps/web/.env.example apps/web/.env.local # Frontend (NEXT_PUBLIC_API_URL)
+cp apps/ai-service/.env.example apps/ai-service/.env  # AI keys (opsional)
+```
+
+### Langkah 3 — Jalankan database (MySQL + Redis)
+```bash
+docker compose up -d         # MySQL + Redis saja
+# atau full stack: docker compose --profile apps up -d
+```
+
+### Langkah 4 — Migrasi database (buat 32 tabel)
+```bash
+pnpm db:migrate              # = prisma migrate dev (butuh DATABASE_URL di apps/api/.env)
+pnpm db:generate             # generate Prisma Client
+```
+
+### Langkah 5 — (Opsional) Pasang hook auto-resume
+```bash
+./scripts/install-hooks.sh
+```
+
+---
+
+## 4. Menjalankan Aplikasi
+
+### Development (semua sekaligus)
+```bash
+pnpm dev                     # Turborepo: web + api + admin sekaligus
+cd apps/ai-service && uvicorn app.main:app --reload --port 8000   # AI service
+```
+
+### Per-aplikasi
+```bash
+pnpm --filter @4ig/web dev          # Web   → http://localhost:3000
+pnpm --filter @4ig/api dev          # API   → http://localhost:3001/api/v1
+pnpm --filter @4ig/admin dev        # Admin → http://localhost:3002
+pnpm --filter @4ig/api prisma studio  # GUI database (Prisma Studio)
+```
+
+### Production (single VPS — BAGIAN 13 blueprint)
+```bash
+docker compose -f docker-compose.prod.yml up -d --build
+```
+
+### Verifikasi semua hidup
+```bash
+curl http://localhost:3001/api/v1/health   # → {"success":true,"data":{"status":"ok",...}}
+curl http://localhost:3000/                # → landing page
+```
+
+---
+
+## 5. Autentikasi — Cara Pakai
+
+### 5.1 Melalui Web (halaman)
+
+| Halaman | URL | Fungsi |
+|---|---|---|
+| Landing | `http://localhost:3000/` | Beranda |
+| Register | `http://localhost:3000/register` | Daftar akun baru |
+| Login | `http://localhost:3000/login` | Masuk |
+| Dashboard | `http://localhost:3000/dashboard` | **Terproteksi** — wajib login |
+
+**Alur:** Daftar/Login → token disimpan (localStorage + cookie) → diarahkan ke Dashboard → tombol **Keluar** untuk logout.
+
+> ⚠️ **Proteksi route:** tanpa cookie `4ig_auth`, akses `/dashboard` otomatis di-redirect ke `/login`.
+
+### 5.2 Melalui API (curl / Postman / Thunder Client)
+
+**Register**
+```bash
+curl -X POST http://localhost:3001/api/v1/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@contoh.com","password":"rahasia123","name":"Nama User"}'
+```
+
+**Login**
+```bash
+curl -X POST http://localhost:3001/api/v1/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"user@contoh.com","password":"rahasia123"}'
+# → { success, data: { user, accessToken, refreshToken } }
+```
+
+**Akses endpoint terproteksi** — pakai header `Authorization: Bearer <accessToken>`
+```bash
+curl http://localhost:3001/api/v1/auth/me \
+  -H "Authorization: Bearer eyJhbGciOi..."     # → data user
+```
+
+**Refresh token** (access token kedaluwarsa 15 menit)
+```bash
+curl -X POST http://localhost:3001/api/v1/auth/refresh \
+  -H "Content-Type: application/json" \
+  -d '{"refreshToken":"<refreshToken>"}'       # → pasangan token baru
+```
+
+**Logout** (mencabut session)
+```bash
+curl -X POST http://localhost:3001/api/v1/auth/logout \
+  -H "Content-Type: application/json" \
+  -d '{"refreshToken":"<refreshToken>"}'
+```
+
+### 5.3 Aturan Token (blueprint BAGIAN 12)
+
+| Token | Umur | Dipakai untuk |
+|---|---|---|
+| accessToken (JWT) | **15 menit** | Header `Authorization: Bearer` pada request terproteksi |
+| refreshToken (JWT) | **7 hari** | Mendapat access token baru, di-revoke saat logout |
+
+- Password di-hash **bcrypt cost 12**
+- Session disimpan di tabel `sessions` (hash SHA-256 refresh token)
+- Saat refresh → session lama di-revoke, session baru dibuat (rotasi)
+
+---
+
+## 6. Daftar Endpoint API
+
+> Base URL: `http://localhost:3001/api/v1` (dev) · `https://api.4igeneration.com/v1` (prod, nanti)
+
+### ✅ Sudah berfungsi
+
+| Method | Endpoint | Auth | Deskripsi |
+|---|---|---|---|
+| GET | `/health` | — | Health check service |
+| POST | `/auth/register` | — | Daftar user baru |
+| POST | `/auth/login` | — | Login → user + token |
+| POST | `/auth/refresh` | — | Rotasi refresh token |
+| POST | `/auth/logout` | — | Revoke session |
+| GET | `/auth/me` | 🔒 | Data user saat ini |
+| GET | `/users/profile` | 🔒 | Profil lengkap user |
+| PUT | `/users/profile` | 🔒 | Update profil (name/fullName) |
+
+### ⏳ Rencana (blueprint BAGIAN 8 — belum dibuat)
+
+- `/stocks*` (data saham), `/analysis*` (analisis AI), `/watchlists*`
+- `/subscriptions*`, `/plans*`, `/payments*`, `/credits*`
+- `/api-keys*`, `/usage*`, `/admin/*`, `/playground/*`
+- AI Service: `/internal/v1/generate`, `/analyze/stock`, `/health`, `/providers/status`
+
+> Seluruh endpoint di atas akan ditambahkan bertahap sesuai roadmap. Lihat `docs/roadmap.md`.
+
+---
+
+## 7. Format Respons API
+
+Semua respons dibungkus **format standar** (blueprint BAGIAN 8) oleh interceptor/filter global.
+
+**Sukses:**
+```json
+{
+  "success": true,
+  "data": { ... },
+  "meta": { "timestamp": "2026-08-10T...", "request_id": "req_..." }
+}
+```
+
+**Error:**
+```json
+{
+  "success": false,
+  "error": { "code": "VALIDATION_ERROR", "message": "Email tidak valid", "details": [...] },
+  "meta": { "timestamp": "...", "request_id": "..." }
+}
+```
+
+**Kode HTTP umum:** `200` OK · `201` Created · `400` Validasi · `401` Belum login · `403` Dilarang · `404` Tidak ditemukan · `409` Konflik (email terdaftar) · `500` Internal error.
+
+---
+
+## 8. Design System Cosmic
+
+**Tema visual:** "Cosmic AI Command Center" (BAGIAN 5 blueprint) — deep space × AI × holographic.
+
+### Komponen UI dasar (`apps/web/src/components/ui/`)
+| Komponen | Varian | Lokasi |
+|---|---|---|
+| `Button` | default (cosmic), ghost, outline, link, danger · size sm/md/lg | `ui/button.tsx` |
+| `Input` | + label, hint, error | `ui/input.tsx` |
+| `Card` | default (elevated), glass (blur), cosmic (glow) | `ui/card.tsx` |
+
+### Komponen Cosmic (`apps/web/src/components/cosmic/`)
+| Komponen | Fungsi |
+|---|---|
+| `NeonCard` | Kartu dengan aksen neon (glow: purple/blue/cyan) + hover lift |
+| `StatusOrb` | Indikator status ber-pulse (success/warning/error/info/neutral) |
+| `ParticleField` | Background bintang & nebula (CSS murni, nonaktif di mobile) |
+| `AIResponseCard` | Pola respons AI: loading (progress) / completed (tokens+actions) / error (fallback) |
+
+### Contoh pemakaian
+```tsx
+import { NeonCard } from "@/components/cosmic/neon-card";
+import { StatusOrb } from "@/components/cosmic/status-orb";
+
+<NeonCard glow="purple" title="AI Stock Analysis" subtitle="...">konten</NeonCard>
+<StatusOrb status="success" label="API Online" />
+```
+
+### Tier kosmik (sesuai blueprint)
+- **Tier 1** Marketing (landing) → full cosmic: ParticleField + NeonCard + AIResponseCard demo
+- **Tier 2** Dashboard → balanced cosmic: StatusOrb + NeonCard statistik
+- **Tier 3** Working pages (login/register) → minimal cosmic: Card + Input + Button
+- **Tier 4** Admin panel → profesional (Refine/AntD, diisi Week 7-8)
+
+### Efek reduksi
+- Mobile (<768px): ParticleField mati otomatis (CSS `hidden md:block`)
+- `prefers-reduced-motion`: semua animasi dikecilkan (globals.css)
+
+---
+
+## 9. Git Workflow & Backup
+
+> **Prinsip kerja:** setiap pekerjaan selesai → **commit + push ke GitHub langsung** (backup otomatis, sesuai kesepakatan).
+
+### Alur harian
+```bash
+# 1. Lihat perubahan
+git status
+
+# 2. Tandai semua & commit (pesan deskriptif)
+git add -A
+git commit -m "feat: deskripsi singkat pekerjaan"
+
+# 3. Push ke GitHub
+git push
+```
+
+### Setup ulang di sesi baru (⚠️ penting)
+File `.git/config` (remote & identitas) **tidak ikut tersimpan antar sesi workspace**. Setiap sesi baru, jalankan sekali:
+```bash
+./scripts/setup-git.sh --remote https://github.com/andiagilrachman/4IGeneration.git
+```
+
+### Push butuh token
+```bash
+GITHUB_TOKEN=ghp_xxx ./scripts/github-push.sh
+```
+> Token dipakai sekali lalu **dihapus dari config** (tidak tersimpan). Buat token di https://github.com/settings/tokens (classic, scope `repo`) atau fine-grained dengan **Contents: Read and write**.
+
+### Branch strategy
+`main` (production) · `develop` · `feature/*` · `fix/*` · `hotfix/*`
+
+### Commit convention
+`feat:` `fix:` `docs:` `style:` `refactor:` `test:` `chore:` `perf:`
+
+---
+
+## 9. Script Utility
+
+| Script | Fungsi | Contoh |
+|---|---|---|
+| `scripts/resume.sh` | Update RESUME.md manual | `./scripts/resume.sh "implementasi X"` |
+| `scripts/install-hooks.sh` | Pasang post-commit hook (auto-resume) | `./scripts/install-hooks.sh` |
+| `scripts/setup-git.sh` | Set identitas git + remote origin | `./scripts/setup-git.sh --remote <url>` |
+| `scripts/github-push.sh` | Push ke GitHub dengan token (aman) | `GITHUB_TOKEN=ghp_x ./scripts/github-push.sh` |
+
+---
+
+## 10. Resume Progres Otomatis
+
+`RESUME.md` di root = **resume resmi proyek** (apa yang dikerjakan, sejauh mana, langkah selanjutnya).
+
+**Cara kerja:**
+- **Otomatis:** setelah `scripts/install-hooks.sh` dipasang, setiap `git commit` menambah entri ke tabel log RESUME.md
+- **Manual:** `./scripts/resume.sh "deskripsi"` atau `pnpm resume "deskripsi"`
+
+**Cara membaca:** bagian `Log Pekerjaan` (terbaru di atas) · `Progres per Fase` (checklist roadmap) · `Langkah Selanjutnya` (next actions).
+
+---
+
+## 11. Troubleshooting
+
+| Gejala | Penyebab | Solusi |
+|---|---|---|
+| API tidak merespons | Server belum jalan | `pnpm --filter @4ig/api dev` |
+| `ECONNREFUSED` di port 3306 | MySQL belum jalan | `docker compose up -d` (atau `sudo service mariadb start`) |
+| `P1001` Prisma (DB tidak konek) | `DATABASE_URL` salah | Cek `apps/api/.env`, pastikan user/pass benar |
+| `P1003` Prisma (tabel tidak ada) | Belum migrasi | `pnpm db:migrate` |
+| `/dashboard` redirect terus ke login | Belum login | Daftar/login dulu di web |
+| Push ditolak `403` | Token tanpa izin tulis | Buat token dengan scope `repo` / Contents read-write |
+| Push ditolak (bukan fast-forward) | Remote punya commit lain | `git pull --rebase` lalu push (atau force jika yakin) |
+| Hook tidak jalan (warning ignored) | Bit executable hilang | `chmod +x .git/hooks/post-commit` |
+| `node_modules` tidak ada (sesi baru) | Tidak tersimpan antar sesi | `pnpm install` |
+| Web `500` saat akses halaman | Compile error | Cek terminal web dev server |
+
+---
+
+## 12. Status Roadmap
+
+| Fase | Bulan | Status |
+|---|---|---|
+| **Fase 0 — Persiapan repo** | — | ✅ **Selesai** (monorepo, Docker, Prisma, CI, git) |
+| **Phase 1 — Foundation** | 1-3 | 🟡 **Berjalan** (Week 1-4) |
+| Phase 2 — Monetization | 4-6 | ⏳ Belum |
+| Phase 3 — Public API | 7-9 | ⏳ Belum |
+| Phase 4 — Own Model | 10-12 | ⏳ Belum |
+
+**Detail checklist per minggu:** lihat `docs/roadmap.md` · **Resume eksekutif:** lihat `RESUME.md`
+
+---
+
+*Dokumen ini hidup — diperbarui setiap ada pekerjaan selesai. Terakhir: 2026-08-10 (Design System Cosmic).*

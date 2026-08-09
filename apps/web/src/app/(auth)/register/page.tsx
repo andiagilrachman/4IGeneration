@@ -9,6 +9,9 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -39,7 +42,7 @@ export default function RegisterPage() {
 
   return (
     <main className="flex min-h-screen items-center justify-center bg-bg-deep bg-cosmic-radial px-6">
-      <div className="glass-panel w-full max-w-sm p-8">
+      <Card className="w-full max-w-sm">
         <h1 className="font-display text-2xl font-bold">Daftar Akun</h1>
         <p className="mt-1 text-sm text-text-muted">Mulai analisis saham dengan AI</p>
 
@@ -50,53 +53,35 @@ export default function RegisterPage() {
         )}
 
         <form className="mt-6 space-y-4" onSubmit={onSubmit}>
-          <div>
-            <label htmlFor="name" className="mb-1 block text-sm text-text-secondary">
-              Nama (opsional)
-            </label>
-            <input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-bg-base px-4 py-2.5 text-sm outline-none focus:border-primary"
-            />
-          </div>
-          <div>
-            <label htmlFor="email" className="mb-1 block text-sm text-text-secondary">
-              Email
-            </label>
-            <input
-              id="email"
-              type="email"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-bg-base px-4 py-2.5 text-sm outline-none focus:border-primary"
-            />
-          </div>
-          <div>
-            <label htmlFor="password" className="mb-1 block text-sm text-text-secondary">
-              Password
-            </label>
-            <input
-              id="password"
-              type="password"
-              required
-              minLength={8}
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              className="w-full rounded-lg border border-white/10 bg-bg-base px-4 py-2.5 text-sm outline-none focus:border-primary"
-            />
-            <p className="mt-1 text-xs text-text-disabled">Minimal 8 karakter</p>
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full rounded-lg bg-primary py-2.5 font-semibold text-white shadow-glow-purple transition-colors hover:bg-primary-hover disabled:opacity-60"
-          >
+          <Input
+            name="name"
+            label="Nama (opsional)"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Nama lengkap"
+          />
+          <Input
+            name="email"
+            label="Email"
+            type="email"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            placeholder="nama@email.com"
+          />
+          <Input
+            name="password"
+            label="Password"
+            type="password"
+            required
+            minLength={8}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            hint="Minimal 8 karakter"
+          />
+          <Button type="submit" disabled={loading} className="w-full" size="lg">
             {loading ? "Mendaftarkan..." : "Daftar"}
-          </button>
+          </Button>
         </form>
 
         <p className="mt-6 text-center text-sm text-text-muted">
@@ -105,7 +90,7 @@ export default function RegisterPage() {
             Masuk
           </Link>
         </p>
-      </div>
+      </Card>
     </main>
   );
 }

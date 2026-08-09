@@ -1,12 +1,16 @@
 "use client";
 
 /**
- * Dashboard — Command Center (Tier 2).
- * Menampilkan user asli dari store (hasil GET /auth/me saat login).
+ * Dashboard — Command Center (Tier 2: balanced cosmic).
+ * Menampilkan user asli dari store + komponen design system.
  */
 
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
+import { NeonCard } from "@/components/cosmic/neon-card";
+import { StatusOrb } from "@/components/cosmic/status-orb";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -33,10 +37,10 @@ export default function DashboardPage() {
   }
 
   const stats = [
-    { label: "Analisis Hari Ini", value: "—" },
-    { label: "Watchlist", value: "—" },
-    { label: "Saham Dipantau", value: "—" },
-    { label: "Kredit Tersisa", value: "—" },
+    { label: "Analisis Hari Ini", value: "—", glow: "purple" as const },
+    { label: "Watchlist", value: "—", glow: "blue" as const },
+    { label: "Saham Dipantau", value: "—", glow: "cyan" as const },
+    { label: "Kredit Tersisa", value: "—", glow: "purple" as const },
   ];
 
   return (
@@ -49,25 +53,31 @@ export default function DashboardPage() {
               Selamat datang, <span className="text-highlight">{user.name ?? user.email}</span> 👋
             </p>
           </div>
-          <button
-            onClick={handleLogout}
-            className="rounded-lg border border-white/10 bg-bg-elevated px-4 py-2 text-sm text-text-secondary transition-colors hover:border-error/40 hover:text-error"
-          >
+          <Button variant="danger" onClick={handleLogout}>
             Keluar
-          </button>
+          </Button>
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        {/* Status bar */}
+        <Card variant="default" className="mt-6 flex flex-wrap items-center gap-6 !p-4">
+          <StatusOrb status="success" label="API Online" />
+          <StatusOrb status="info" label={`Role: ${user.role}`} />
+          <StatusOrb status={user.status === "ACTIVE" ? "success" : "warning"} label={`Status: ${user.status}`} />
+          <span className="ml-auto font-mono text-xs text-text-muted">{user.email}</span>
+        </Card>
+
+        {/* Stats */}
+        <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {stats.map((s) => (
-            <div key={s.label} className="glass-panel p-5">
-              <p className="text-sm text-text-muted">{s.label}</p>
-              <p className="mt-2 font-display text-2xl font-bold">{s.value}</p>
-            </div>
+            <NeonCard key={s.label} glow={s.glow} title={s.label}>
+              <p className="font-display text-2xl font-bold">{s.value}</p>
+            </NeonCard>
           ))}
         </div>
 
+        {/* Akun + placeholder fitur */}
         <div className="mt-6 grid gap-4 md:grid-cols-2">
-          <div className="glass-panel p-6">
+          <Card>
             <h2 className="font-display text-lg font-semibold">Akun</h2>
             <dl className="mt-3 space-y-2 font-mono text-sm">
               <div className="flex justify-between">
@@ -83,10 +93,10 @@ export default function DashboardPage() {
                 <dd className="text-success">● {user.status}</dd>
               </div>
             </dl>
-          </div>
-          <div className="glass-panel p-6 text-center text-text-muted">
+          </Card>
+          <Card className="text-center text-text-muted">
             🛰 Screener, Analisis Emiten, Playground &amp; Market — menyusul di fase berikutnya
-          </div>
+          </Card>
         </div>
       </div>
     </main>

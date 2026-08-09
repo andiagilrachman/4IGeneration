@@ -12,6 +12,7 @@
 | Dokumen | Lokasi | Isi |
 |---|---|---|
 | Resume progres (auto-update) | `RESUME.md` | Apa yang dikerjakan · sejauh mana · langkah selanjutnya |
+| **Panduan penggunaan lengkap** | **`docs/USAGE.md`** | **Setup, menjalankan, autentikasi, API, git & backup, troubleshooting** |
 | Blueprint master | `docs/blueprint/` | 20 bagian lengkap (arsip sumber) |
 | Roadmap per minggu | `docs/roadmap.md` | Checklist 12 bulan |
 | Arsitektur ringkas | `docs/architecture.md` | Diagram alur & port |
