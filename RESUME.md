@@ -14,7 +14,7 @@
 | 📊 Progres keseluruhan (roadmap 12 bulan) | **~6%** |
 | 🏁 Milestone terdekat | **Week 1-2**: Setup repo + Database schema + Auth dasar |
 | 🗂 Repositori git | ✅ Terinisialisasi (branch `main`, commit awal dibuat) |
-| ☁️ Remote (GitHub) | ⏳ Belum — tinggal `git remote add` + `git push` (lihat README) |
+| ☁️ Remote (GitHub) | ✅ **Terhubung & ter-push** → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) |
 | 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
 | 📓 Sistem resume otomatis | ✅ `scripts/resume.sh` + post-commit hook |
 
@@ -81,6 +81,7 @@
 | Tanggal | Pekerjaan | Status | Catatan |
 |---|---|---|---|
 | 2026-08-10 | Init monorepo 4IGeneration v2 + skeleton 4 apps + Docker + Prisma + AI gateway + resume otomatis + git init | ✅ Selesai | Fase 0 — persiapan repo selesai |
+| 2026-08-10 | Push ke GitHub | 102 file ter-push ke github.com/andiagilrachman/4IGeneration (branch main). CI workflow sementara di .github/workflows-disabled/ (butuh token workflow scope) |
 
 ---
 
