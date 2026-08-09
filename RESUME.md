@@ -75,7 +75,6 @@
 
 <!-- LOG-START -->
 | 2026-08-09 | feat: koneksikan AI Gateway — Gemini + OpenRouter API keys, model gemini-flash-latest, fallback logic teruji end-to-end | ✅ Selesai | auto (post-commit hook) |
-| 2026-08-09 | feat: koneksikan AI Gateway — Gemini + OpenRouter keys, model gemini-flash-latest, fallback teruji end-to-end | ✅ Selesai | |
 | 2026-08-09 | feat: design system cosmic (Week 4) — komponen NeonCard/StatusOrb/ParticleField/AIResponseCard, landing cosmic, dokumentasi USAGE.md lengkap | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: frontend auth — login/register terhubung API, zustand store, proteksi route, dashboard user | ✅ Selesai | |
 | 2026-08-09 | chore: jadikan scripts executable | ✅ Selesai | auto (post-commit hook) |
