@@ -74,6 +74,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-09 | chore: jadikan scripts executable | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: implement auth module (register, login, refresh, logout, me) + users profile — JWT + bcrypt + prisma migrate init, teruji end-to-end | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | Push Auth module ke GitHub | ✅ | commit b8bf4e1 ter-push — 117 file live di repo |
 | 2026-08-09 | docs: add github-push.sh untuk push ke GitHub dengan PAT | ✅ Selesai | auto (post-commit hook) |
