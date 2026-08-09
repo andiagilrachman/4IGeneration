@@ -69,8 +69,10 @@ def build_providers(settings: Settings) -> list[Provider]:
                 priority=1,
                 weight=40,
                 api_key=settings.gemini_api_key,
-                base_url="https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent",
-                model="gemini-1.5-flash",
+                # gemini-flash-latest = alias stabil model flash terbaru yang aktif
+                # (model lama seperti gemini-1.5-flash/2.x tidak tersedia utk akun baru)
+                base_url="https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent",
+                model="gemini-flash-latest",
                 auth_scheme="key_query",
             )
         )

@@ -24,9 +24,9 @@
 
 ### Bulan 2 — AI Gateway & Admin Panel
 - [ ] **W5** FastAPI project ✅ *(scaffold sudah dibuat)*
-- [ ] **W5** AI Gateway LiteLLM (provider abstraction + fallback) ✅ *(skeleton dasar sudah)*
-- [ ] **W5** Test dengan Gemini + Groq
-- [ ] **W6** Health check endpoints ✅ *(sudah ada /internal/v1/health)*
+- [x] **W5** AI Gateway (provider abstraction + fallback + circuit breaker) ✅ *(teruji: Gemini primary, OpenRouter fallback)*
+- [x] **W5** Test dengan provider nyata ✅ *(Gemini + OpenRouter terhubung & teruji)*
+- [x] **W6** Health check endpoints ✅ *(/internal/v1/health + /providers/status)*
 - [ ] **W7** Refine.dev setup ✅ *(scaffold sudah dibuat)*
 - [ ] **W7** Providers CRUD + provider keys CRUD
 - [ ] **W8** Models CRUD + settings management

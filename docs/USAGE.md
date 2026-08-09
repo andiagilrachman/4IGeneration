@@ -16,11 +16,12 @@
 6. [Daftar Endpoint API](#6-daftar-endpoint-api)
 7. [Format Respons API](#7-format-respons-api)
 8. [Design System Cosmic](#8-design-system-cosmic)
-9. [Git Workflow & Backup](#9-git-workflow--backup)
-10. [Script Utility](#10-script-utility)
-11. [Resume Progres Otomatis](#11-resume-progres-otomatis)
-12. [Troubleshooting](#12-troubleshooting)
-13. [Status Roadmap](#13-status-roadmap)
+9. [AI Service & API Keys](#9-ai-service--api-keys)
+10. [Git Workflow & Backup](#10-git-workflow--backup)
+11. [Script Utility](#11-script-utility)
+12. [Resume Progres Otomatis](#12-resume-progres-otomatis)
+13. [Troubleshooting](#13-troubleshooting)
+14. [Status Roadmap](#14-status-roadmap)
 
 ---
 
@@ -286,7 +287,63 @@ import { StatusOrb } from "@/components/cosmic/status-orb";
 
 ---
 
-## 9. Git Workflow & Backup
+## 9. AI Service & API Keys
+
+**AI Service** (`apps/ai-service`, port 8000) adalah **AI Gateway multi-provider** — titik masuk semua permintaan AI ke provider eksternal, dengan **fallback otomatis** (prinsip *never depend on 1 API*, blueprint BAGIAN 10).
+
+### Provider yang dikonfigurasi saat ini
+
+| Provider | Priority | Weight | Status |
+|---|---|---|---|
+| **Gemini** (`gemini-flash-latest`) | 1 (primary) | 40% | ✅ Aktif — key valid |
+| **OpenRouter** (`openai/gpt-4o-mini`) | 4 (backup) | 5% | ✅ Aktif — key valid |
+| Groq / Mistral | 2-3 | 40%/15% | ⏳ Belum (isi key kapan saja) |
+
+> 📌 **Model Gemini:** akun baru tidak bisa pakai `gemini-1.5-flash` / `2.x` — gateway memakai **`gemini-flash-latest`** (alias stabil, sudah teruji).
+
+### Cara isi API key
+
+```bash
+cp apps/ai-service/.env.example apps/ai-service/.env
+# isi: GEMINI_API_KEY=... · GROQ_API_KEY=... · MISTRAL_API_KEY=... · OPENROUTER_API_KEY=...
+```
+> ⚠️ `.env` di-gitignore — **tidak akan pernah ter-commit** ke GitHub.
+
+### Endpoint AI Service (prefix `/internal/v1`)
+
+| Method | Endpoint | Fungsi |
+|---|---|---|
+| GET | `/health` | Health check + jumlah provider |
+| GET | `/providers/status` | Status tiap provider (healthy, hits, avg response) |
+| POST | `/analyze/stock` | Analisis 1 saham IDX via AI Gateway (`{"ticker":"BBCA"}`) |
+| POST | `/generate` | (rencana) Generasi AI umum |
+
+### Alur fallback (sudah teruji ✅)
+
+```
+Request → AIGateway.generate()
+  → pilih provider priority terendah yang healthy (Gemini)
+  → berhasil? → respons ternormalisasi → balik ke user
+  → gagal?   → otomatis coba provider berikutnya (OpenRouter)
+  → semua gagal → error 502 dengan pesan jelas
+```
+
+**Hasil uji:** Gemini analisis BBCA/TLKM ✅ · saat Gemini dinonaktifkan, OpenRouter otomatis ambil alih analisis BBRI ✅.
+
+### Contoh curl
+```bash
+# health
+curl http://localhost:8000/internal/v1/health
+
+# analisis saham
+curl -X POST http://localhost:8000/internal/v1/analyze/stock \
+  -H "Content-Type: application/json" \
+  -d '{"ticker":"BBCA"}'
+```
+
+---
+
+## 10. Git Workflow & Backup
 
 > **Prinsip kerja:** setiap pekerjaan selesai → **commit + push ke GitHub langsung** (backup otomatis, sesuai kesepakatan).
 
