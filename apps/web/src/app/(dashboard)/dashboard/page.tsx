@@ -55,6 +55,9 @@ export default function DashboardPage() {
             </p>
           </div>
           <div className="flex gap-3">
+            <Link href="/analysis">
+              <Button variant="outline">🧠 Analisis</Button>
+            </Link>
             <Link href="/screener">
               <Button variant="outline">🔍 Screener</Button>
             </Link>

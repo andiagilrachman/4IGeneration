@@ -47,7 +47,7 @@
 
 ## 🟡 PHASE 2: MONETIZATION (Bulan 4-6)
 
-- [ ] **W13-14** Analisis Emiten (prompt, UI, fundamentals, history)
+- [x] **W13-14** Analisis Emiten (prompt, UI, fundamentals, history) ✅ *(halaman /analysis — analisis data nyata + riwayat per-user)*
 - [ ] **W15-16** Subscription system (plans CRUD, credits, usage tracking)
 - [ ] **W17-18** Payment Midtrans (checkout, callback, invoice, webhooks)
 - [ ] **W19-20** Market Recap (news fetcher, sentiment, email)

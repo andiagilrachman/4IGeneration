@@ -1,14 +1,20 @@
-import { Injectable, Logger } from "@nestjs/common";
+import { Injectable, Logger, NotFoundException } from "@nestjs/common";
+import { PrismaService } from "../../prisma/prisma.service";
 
 /**
- * AnalysisService — proxy ke AI Service (FastAPI) untuk fitur analisis AI.
- * Arsitektur: Web → NestJS (public API) → FastAPI (AI gateway + data) → provider AI
- * Referensi blueprint BAGIAN 8.6 (AI Analysis Endpoints).
+ * AnalysisService — analisis AI 1 saham + simpan riwayat ke DB.
+ * Arsitektur: Web → NestJS (auth + save) → FastAPI (AI gateway + data) → provider AI
+ *
+ * Referensi blueprint:
+ * - BAGIAN 8.6: POST /analysis/stock, GET /analysis/history, GET /analysis/:id, DELETE /analysis/:id
+ * - W13-14 roadmap: Analisis Emiten + save history (menuju Phase 2)
  */
 @Injectable()
 export class AnalysisService {
   private readonly logger = new Logger(AnalysisService.name);
   private readonly baseUrl = process.env.AI_SERVICE_URL ?? "http://localhost:8000";
+
+  constructor(private readonly prisma: PrismaService) {}
 
   private async proxy<T>(path: string, body: unknown): Promise<T> {
     const res = await fetch(`${this.baseUrl}/internal/v1${path}`, {
@@ -33,11 +39,75 @@ export class AnalysisService {
     }
   }
 
-  /** Analisis 1 saham (data nyata + AI). */
-  async analyzeStock(ticker: string) {
+  /**
+   * Analisis 1 saham (data nyata + AI), lalu simpan ke tabel analysis_requests.
+   * Butuh userId (dari JWT) agar riwayat bisa dilacak per user.
+   */
+  async analyzeStock(ticker: string, userId?: string) {
     const data = await this.proxy<{ success: boolean; data: unknown }>("/analyze/stock", {
       ticker,
     });
-    return data.data;
+    const result = (data as { success: boolean; data: unknown }).data as {
+      provider?: string;
+      model?: string;
+      model_alias?: string;
+      content?: string;
+      stock_data?: string | null;
+      response_time_ms?: number;
+    };
+
+    // simpan ke DB bila user login (riwayat)
+    let saved: { id: string } | null = null;
+    if (userId) {
+      saved = await this.prisma.analysisRequest.create({
+        data: {
+          userId,
+          type: "STOCK",
+          input: { ticker: ticker.toUpperCase() },
+          result: result as object,
+          provider: result.provider ?? null,
+          modelAlias: result.model_alias ?? null,
+          status: "COMPLETED",
+          responseTimeMs: result.response_time_ms ?? null,
+        },
+        select: { id: true },
+      });
+    }
+
+    return { ...result, id: saved?.id ?? null };
+  }
+
+  /** Riwayat analisis milik user (terbaru di atas). */
+  async history(userId: string, take = 20) {
+    return this.prisma.analysisRequest.findMany({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+      take: Math.min(take, 50),
+      select: {
+        id: true,
+        type: true,
+        input: true,
+        provider: true,
+        modelAlias: true,
+        status: true,
+        createdAt: true,
+      },
+    });
+  }
+
+  /** Detail satu analisis (hanya milik user yang sama). */
+  async getOne(userId: string, id: string) {
+    const item = await this.prisma.analysisRequest.findFirst({
+      where: { id, userId },
+    });
+    if (!item) throw new NotFoundException("Analisis tidak ditemukan");
+    return item;
+  }
+
+  /** Hapus analisis (hanya milik user yang sama). */
+  async remove(userId: string, id: string) {
+    const item = await this.getOne(userId, id);
+    await this.prisma.analysisRequest.delete({ where: { id: item.id } });
+    return { deleted: true };
   }
 }

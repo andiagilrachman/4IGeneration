@@ -2,18 +2,25 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Delete,
   Get,
   NotFoundException,
   Param,
   Post,
+  Query,
+  UseGuards,
 } from "@nestjs/common";
+import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
+import { CurrentUser } from "../../common/decorators/current-user.decorator";
 import { AnalysisService } from "./analysis.service";
 
 /**
- * Endpoint analisis AI — sesuai blueprint BAGIAN 8.6:
- * POST /analysis/screener      → AI-powered screening saham
- * POST /analysis/stock         → analisis 1 saham
- * GET  /analysis/history       → riwayat (fase lanjut, butuh auth + DB)
+ * Endpoint analisis AI — blueprint BAGIAN 8.6:
+ * POST   /analysis/screener   → AI-powered screening (public, data market)
+ * POST   /analysis/stock      → analisis 1 saham + simpan riwayat (🔒 login)
+ * GET    /analysis/history    → riwayat user (🔒)
+ * GET    /analysis/:id        → detail analisis (🔒)
+ * DELETE /analysis/:id        → hapus analisis (🔒)
  */
 @Controller("analysis")
 export class AnalysisController {
@@ -43,15 +50,39 @@ export class AnalysisController {
   }
 
   @Post("stock")
-  async analyzeStock(@Body() body: { ticker: string }) {
+  @UseGuards(JwtAuthGuard)
+  async analyzeStock(
+    @Body() body: { ticker: string },
+    @CurrentUser("id") userId: string,
+  ) {
     if (!body.ticker) {
       throw new BadRequestException("ticker wajib diisi");
     }
     try {
-      return await this.analysisService.analyzeStock(body.ticker);
+      return await this.analysisService.analyzeStock(body.ticker, userId);
     } catch {
-      throw new NotFoundException(`Analisis ${body.ticker} gagal — cek koneksi AI service`);
+      throw new BadRequestException(
+        `Analisis ${body.ticker} gagal — cek koneksi AI service atau coba lagi`,
+      );
     }
+  }
+
+  @Get("history")
+  @UseGuards(JwtAuthGuard)
+  history(@CurrentUser("id") userId: string, @Query("take") take?: string) {
+    return this.analysisService.history(userId, take ? Number(take) : 20);
+  }
+
+  @Get(":id")
+  @UseGuards(JwtAuthGuard)
+  getOne(@CurrentUser("id") userId: string, @Param("id") id: string) {
+    return this.analysisService.getOne(userId, id);
+  }
+
+  @Delete(":id")
+  @UseGuards(JwtAuthGuard)
+  remove(@CurrentUser("id") userId: string, @Param("id") id: string) {
+    return this.analysisService.remove(userId, id);
   }
 
   @Get("health")

@@ -214,7 +214,10 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 | GET | `/stocks/:ticker` | — | Data saham nyata (harga, PE, ROE, range 52w, 5 hari) |
 | GET | `/stocks/sectors` | — | Daftar sektor unik (dropdown screener) |
 | POST | `/analysis/screener` | — | **AI-powered screener** (filter fundamental + opsi analisis AI) |
-| POST | `/analysis/stock` | — | Analisis 1 saham berbasis data nyata |
+| POST | `/analysis/stock` | 🔒 | Analisis 1 saham (data nyata) + **tersimpan ke riwayat** |
+| GET | `/analysis/history` | 🔒 | Riwayat analisis user (terbaru di atas) |
+| GET | `/analysis/:id` | 🔒 | Detail satu analisis (hanya milik user) |
+| DELETE | `/analysis/:id` | 🔒 | Hapus analisis |
 | GET | `/analysis/health` | — | Status module analysis |
 
 **AI Service (internal, prefix `/internal/v1`):**
@@ -240,6 +243,13 @@ curl -X POST http://localhost:3001/api/v1/analysis/screener \
   -H "Content-Type: application/json" \
   -d '{"min_roe":0.15,"limit":10,"analyze":true}'
 ```
+
+### 🧠 Cara pakai Analisis Emiten
+1. Login → buka **http://localhost:3000/analysis** (dari dashboard klik **🧠 Analisis**)
+2. Ketik kode saham (BBCA, BBRI, dst) → klik **Analisis**
+3. AI menganalisis **data nyata** (harga, ROE, PE, margin, range 52w) → hasil + data yang dipakai ditampilkan
+4. Hasil **otomatis tersimpan ke riwayat** — klik "Lihat" untuk membuka lagi, "Hapus" untuk menghapus
+5. Riwayat per-user (butuh login; tanpa login → 401)
 
 ### ⏳ Rencana (blueprint BAGIAN 8 — belum dibuat)
 
