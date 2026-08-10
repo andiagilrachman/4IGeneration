@@ -100,6 +100,42 @@ export class AnalysisService {
     };
   }
 
+  /** Bandingkan 2-5 saham (data nyata + AI summary). */
+  async compare(tickers: string[]) {
+    const data = await this.proxy<{ success: boolean; data: unknown }>("/analyze/compare", {
+      tickers,
+    });
+    return data.data;
+  }
+
+  /** Export riwayat analisis ke CSV (string). */
+  exportHistoryCsv(userId: string): Promise<string> {
+    return this.prisma.analysisRequest
+      .findMany({
+        where: { userId },
+        orderBy: { createdAt: "desc" },
+        take: 500,
+      })
+      .then((rows) => {
+        const header = "id,tanggal,tipe,provider,model,status,biaya_kredit\n";
+        const lines = rows.map((r) => {
+          const meta = (r.result as { provider?: string } | null) ?? {};
+          return [
+            r.id,
+            r.createdAt.toISOString(),
+            r.type,
+            meta.provider ?? r.provider ?? "",
+            r.modelAlias ?? "",
+            r.status,
+            r.creditsCost ?? "",
+          ]
+            .map((v) => `"${String(v ?? "").replace(/"/g, '""')}"`)
+            .join(",");
+        });
+        return header + lines.join("\n");
+      });
+  }
+
   /** Riwayat analisis milik user (terbaru di atas). */
   async history(userId: string, take = 20) {
     return this.prisma.analysisRequest.findMany({

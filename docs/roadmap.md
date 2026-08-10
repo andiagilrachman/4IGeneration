@@ -65,7 +65,9 @@
 - [x] **W31-32** SDK JS + Python ✅ *(keduanya teruji live: list saham, detail BBCA, screener)*
 - [ ] **W29-30** Public endpoints standar (format, error, versioning)
 - [ ] **W31-32** SDK JS + Python, Postman collection
-- [ ] **W33-34** Portfolio, watchlist & alerts, comparison, export
+- [x] **W33-34** Watchlist & alerts + Comparison tools + Export data ✅ *(watchlist CRUD, compare 2-5 saham + AI, export CSV)*
+
+> 🏆 **MILESTONE: Phase 3 — Public API SELESAI!** (API key, SDK JS+Python, Docs, Growth features)
 - [ ] **W35-36** Marketing site (landing, blog CMS, SEO)
 
 > 🏁 **MILESTONE: Public API LIVE + Growth features!**

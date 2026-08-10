@@ -586,3 +586,9 @@ GITHUB_TOKEN=ghp_xxx ./scripts/github-push.sh
 - **Python SDK** (`packages/sdk-python`) — `pip install -e packages/sdk-python` → `FourIG(api_key=...)` dengan metode sama
 - **Halaman Developer Docs**: `/docs` (login) — quick start, endpoint, contoh curl, keamanan
 - Kedua SDK teruji live: list 28 saham, detail BBCA (price 6375, ROE 21.8%), screener
+
+### 📌 Growth Features (W33-34)
+- **Watchlist** (`/watchlist`, 🔒): buat watchlist, tambah/hapus saham, kelola per user — `GET/POST /watchlists*`
+- **Compare** (`/compare`, 🔒): bandingkan 2-5 saham — tabel metrik (harga, PE, ROE, margin) + **AI summary** — `POST /analysis/compare`
+- **Export CSV** (`GET /analysis/export/csv`, 🔒): unduh riwayat analisis sebagai file CSV
+- **Public API** juga sudah punya `POST /public/analysis/stock` & screener untuk developer

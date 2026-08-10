@@ -8,8 +8,10 @@ import {
   Param,
   Post,
   Query,
+  Res,
   UseGuards,
 } from "@nestjs/common";
+import { Response } from "express";
 import { JwtAuthGuard } from "../../common/guards/jwt-auth.guard";
 import { CurrentUser } from "../../common/decorators/current-user.decorator";
 import { AnalysisService } from "./analysis.service";
@@ -65,6 +67,27 @@ export class AnalysisController {
         `Analisis ${body.ticker} gagal — cek koneksi AI service atau coba lagi`,
       );
     }
+  }
+
+  @Post("compare")
+  @UseGuards(JwtAuthGuard)
+  compare(@Body() body: { tickers?: string[] }) {
+    if (!body.tickers || body.tickers.length < 2 || body.tickers.length > 5) {
+      throw new BadRequestException("Kirim 2-5 ticker untuk dibandingkan");
+    }
+    return this.analysisService.compare(body.tickers);
+  }
+
+  @Get("export/csv")
+  @UseGuards(JwtAuthGuard)
+  async exportCsv(
+    @CurrentUser("id") userId: string,
+    @Res() res: Response,
+  ) {
+    const csv = await this.analysisService.exportHistoryCsv(userId);
+    res.setHeader("Content-Type", "text/csv; charset=utf-8");
+    res.setHeader("Content-Disposition", 'attachment; filename="analisis-riwayat.csv"');
+    res.send(csv);
   }
 
   @Get("history")

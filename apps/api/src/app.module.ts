@@ -15,6 +15,7 @@ import { MarketRecapModule } from "./modules/market-recap/market-recap.module";
 import { RagModule } from "./modules/rag/rag.module";
 import { ApiKeysModule } from "./modules/api-keys/api-keys.module";
 import { PublicModule } from "./modules/public/public.module";
+import { WatchlistsModule } from "./modules/watchlists/watchlists.module";
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { PublicModule } from "./modules/public/public.module";
     RagModule,
     ApiKeysModule,
     PublicModule,
+    WatchlistsModule,
   ],
   controllers: [AppController],
 })
