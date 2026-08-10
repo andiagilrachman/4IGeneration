@@ -50,7 +50,7 @@
 - [x] **W13-14** Analisis Emiten (prompt, UI, fundamentals, history) ✅ *(halaman /analysis — analisis data nyata + riwayat per-user)*
 - [x] **W15-16** Subscription system (plans CRUD, credits, usage tracking) ✅ *(subscribe/cancel/current + kredit bulanan + potong kredit per analisis + pricing & billing page + admin plans CRUD)*
 - [x] **W17-18** Payment Midtrans (checkout Snap, webhook signature, invoice, aktivasi otomatis) ✅ *(sandbox: snap token valid, webhook settlement teruji, signature palsu ditolak)*
-- [ ] **W19-20** Market Recap (news fetcher, sentiment, email)
+- [x] **W19-20** Market Recap (news fetcher Google News, sentiment AI, recap harian, riwayat per-user) ✅ *(email via Resend menyusul — butuh API key)*
 - [ ] **W21-22** RAG (ChromaDB, PDF processing, embeddings)
 - [ ] **W23-24** Chat UI (streaming, context, upload)
 

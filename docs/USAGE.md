@@ -224,6 +224,9 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 | GET | `/payments` | 🔒 | Riwayat pembayaran (+ invoice) |
 | GET | `/payments/:id` | 🔒 | Detail pembayaran |
 | POST | `/payments/webhook/midtrans` | — | Notifikasi Midtrans (public, signature SHA512 diverifikasi) |
+| POST | `/analysis/market-recap` | 🔒 | **Market Recap** — berita + data + AI (tersimpan) |
+| GET | `/analysis/market-recap/history` | 🔒 | Riwayat recap user |
+| GET | `/analysis/market-recap/:id` | 🔒 | Detail recap |
 | POST | `/analysis/screener` | — | **AI-powered screener** (filter fundamental + opsi analisis AI) |
 | POST | `/analysis/stock` | 🔒 | Analisis 1 saham (data nyata) + **tersimpan ke riwayat** |
 | GET | `/analysis/history` | 🔒 | Riwayat analisis user (terbaru di atas) |
@@ -270,6 +273,13 @@ curl -X POST http://localhost:3001/api/v1/analysis/screener \
 6. Webhook signature SHA512 diverifikasi (payload palsu → 400)
 
 > ⚠️ Di preview sandbox (iframe tanpa internet), Snap popup tidak bisa dimuat — gunakan tombol **Buka Halaman Bayar** (buka di tab browser). Di VPS/domain produksi, semuanya jalan normal.
+
+### 📰 Market Recap (W19-20)
+- Login → buka **http://localhost:3000/market-recap** (dari dashboard klik **📰 Recap**)
+- Klik **"Buat Recap Hari Ini"** → AI susun ringkasan pasar (berita Google News real-time + data saham + analisis)
+- Hasil tersimpan ke riwayat per user (Lihat untuk membuka kembali)
+- Endpoint internal (FastAPI): `GET /news` · `POST /news/sentiment` · `POST /market-recap`
+- Sentiment: AI menilai pasar (positif/netral/negatif + skor 1-100)
 
 ### 🧠 Cara pakai Analisis Emiten
 1. Login → buka **http://localhost:3000/analysis** (dari dashboard klik **🧠 Analisis**)

@@ -11,6 +11,7 @@ python-dotenv==1.0.1
 # --- Fase 2: Stock Data (Week 9-10) ---
 yfinance==0.2.54                # Data saham (Yahoo Finance)
 redis==5.0.8                    # Cache (Week 10 — Redis)
+feedparser==6.0.11              # Berita (Week 19-20 — Google News RSS)
 
 # --- Fase 3+ (uncomment saat implementasi fitur lanjutan) ---
 # litellm==1.44.0                 # AI Gateway unified
