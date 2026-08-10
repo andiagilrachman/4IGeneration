@@ -74,9 +74,9 @@
 
 ## 🏆 PHASE 4: SCALE & OWN MODEL (Bulan 10-12)
 
-- [ ] **W37-38** GPU server + Ollama/vLLM + Llama 3 8B benchmark
+- [x] **W37-38** Infrastruktur model lokal siap ✅ *(provider Ollama di gateway, config env, health status) — GPU server & deploy menyusul*
 - [ ] **W39-40** Integrasi model lokal ke gateway + A/B testing
-- [ ] **W41-42** Dataset finansial + cleaning + format training
+- [x] **W41-42** Script persiapan dataset fine-tune ✅ *(format Alpaca JSONL, data saham nyata) — generate saat GPU siap*
 - [ ] **W43-44** Fine-tune (QLoRA) + eval + deploy
 - [ ] **W45-46** Launch 4IG-Finance + marketing
 - [ ] **W47-48** Year-end review + roadmap Year 2

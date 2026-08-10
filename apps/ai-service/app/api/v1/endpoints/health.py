@@ -13,6 +13,9 @@ router = APIRouter()
 @router.get("/health")
 async def health() -> dict:
     gateway = get_gateway()
+    from app.core.config import get_settings
+
+    settings = get_settings()
     return {
         "success": True,
         "data": {
@@ -21,6 +24,11 @@ async def health() -> dict:
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "providers_configured": len(gateway.providers),
             "cache": redis_cache.stats(),
+            "local_model": {
+                "enabled": bool(settings.ollama_base_url),
+                "url": settings.ollama_base_url or None,
+                "model": settings.ollama_model,
+            },
         },
     }
 

@@ -25,6 +25,11 @@ class Settings(BaseSettings):
     redis_url: str = "redis://localhost:6379"
     stock_cache_ttl_seconds: int = 43200  # 12 jam
 
+    # Model lokal (Phase 4 — Own Model, W37-38)
+    # Contoh: OLLAMA_BASE_URL=http://localhost:11434 OLLAMA_MODEL=llama3:8b
+    ollama_base_url: str = ""
+    ollama_model: str = "llama3:8b"
+
     @property
     def providers_configured(self) -> list[str]:
         """Provider yang punya API key terisi."""

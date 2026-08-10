@@ -141,3 +141,7 @@ git push -u origin main
 ---
 
 *Dibangun mengikuti blueprint 4IGeneration v2.0 · Solo dev edition · Ship 60%, iterate to 100%.*
+
+## 🏆 Phase 4 — Own Model
+Panduan lengkap: [docs/PHASE4-OWN-MODEL.md](docs/PHASE4-OWN-MODEL.md) — provider Ollama sudah siap
+di AI Gateway (aktif saat `OLLAMA_BASE_URL` diisi), plus script persiapan dataset fine-tune.

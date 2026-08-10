@@ -109,6 +109,21 @@ def build_providers(settings: Settings) -> list[Provider]:
                 model="openai/gpt-4o-mini",
             )
         )
+
+    # Model lokal (Ollama / vLLM) — Phase 4: Own Model
+    # OpenAI-compatible API. Tanpa API key. Prioritas 5 (last resort).
+    if settings.ollama_base_url:
+        providers.append(
+            Provider(
+                name="ollama-local",
+                priority=5,
+                weight=0,
+                api_key="ollama",  # dummy — Ollama tidak butuh key
+                base_url=f"{settings.ollama_base_url.rstrip('/')}/v1/chat/completions",
+                model=settings.ollama_model,
+                auth_scheme="none",
+            )
+        )
     return providers
 
 
@@ -151,6 +166,8 @@ class AIGateway:
 
         if provider.auth_scheme == "key_query":
             params["key"] = provider.api_key
+        elif provider.auth_scheme == "none":
+            pass  # model lokal (Ollama) tanpa auth
         else:
             headers["Authorization"] = f"Bearer {provider.api_key}"
 
