@@ -75,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-10 | feat(ui): redesign v2.1 Signature Look — landing & dashboard ala mockup developer-platform (navbar glass, hero + stats row, 4 pilar fitur, CTA, footer; dashboard sidebar + stat cards data nyata: credits/requests/api-keys/watchlist, usage chart 7 hari, recent activity) | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: Email (Resend) + Settings di Admin Panel (W19-20 follow-up) — market recap otomatis via email, konfigurasi no-hardcode di DB (CRUD settings, secret masking), halaman Konfigurasi di admin | ✅ Selesai | commit 9b99613 (dibackup sesi ini) |
 | 2026-08-10 | feat: Phase 4 prep (W37-42) — provider Ollama/local model di AI Gateway, config env, script dataset fine-tune (Alpaca JSONL), panduan PHASE4-OWN-MODEL.md, health status local model | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: Growth Features (W33-34) — watchlist CRUD, compare 2-5 saham + AI summary, export CSV. 🏆 Phase 3 (Public API) SELESAI | ✅ Selesai | auto (post-commit hook) |

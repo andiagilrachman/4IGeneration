@@ -330,6 +330,9 @@ Semua respons dibungkus **format standar** (blueprint BAGIAN 8) oleh interceptor
 
 **Tema visual:** "Cosmic AI Command Center" (BAGIAN 5 blueprint) — deep space × AI × holographic.
 
+> 🎨 **v2.1 — Signature Look (2026-08-10):** landing & dashboard di-redesign meniru mockup developer-platform (referensi user): navbar glass sticky + hero + baris statistik (`99.99% Uptime · 20+ Models · 10K+ Developers · 1B+ API Requests`), 4 pilar fitur (NeonCard), demo AI response, CTA + footer. Dashboard kini developer-style: **sidebar** (Overview → Docs) + **stat cards data nyata** dari API (`/credits/balance`, `/api-keys`, `/analysis/history`, `/watchlists`) + **Usage Overview chart** 7 hari + **Recent Activity**.
+> Warna inti tetap: navy `#070b18` + neon ungu `#7c3aed` + biru `#2563eb` + cyan `#22d3ee` — senada dengan mockup (`#0f1020` / `#7c44e7` / `#517cd0`).
+
 ### Komponen UI dasar (`apps/web/src/components/ui/`)
 | Komponen | Varian | Lokasi |
 |---|---|---|
