@@ -6,20 +6,23 @@ import {
   KeyOutlined,
   LogoutOutlined,
   RobotOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import { getToken, loginAdmin, logoutAdmin } from "./lib/api";
 import Dashboard from "./pages/Dashboard";
 import Providers from "./pages/Providers";
 import Models from "./pages/Models";
 import Keys from "./pages/Keys";
+import Settings from "./pages/Settings";
 
-type PageKey = "dashboard" | "providers" | "models" | "keys";
+type PageKey = "dashboard" | "providers" | "models" | "keys" | "settings";
 
 const menuItems = [
   { key: "dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
   { key: "providers", icon: <ApiOutlined />, label: "AI Providers" },
   { key: "models", icon: <RobotOutlined />, label: "AI Models" },
   { key: "keys", icon: <KeyOutlined />, label: "Provider Keys" },
+  { key: "settings", icon: <SettingOutlined />, label: "Konfigurasi" },
 ];
 
 function LoginScreen({ onLogin }: { onLogin: () => void }) {
@@ -126,6 +129,7 @@ export default function App() {
           {page === "providers" && <Providers />}
           {page === "models" && <Models />}
           {page === "keys" && <Keys />}
+          {page === "settings" && <Settings />}
         </Layout.Content>
       </Layout>
     </Layout>

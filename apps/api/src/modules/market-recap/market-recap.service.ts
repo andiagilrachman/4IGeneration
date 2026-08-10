@@ -1,11 +1,12 @@
 import { Injectable, Logger } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
+import { EmailService } from "../email/email.service";
 
 /**
  * MarketRecapService — ringkasan pasar harian (W19-20).
  * - Proxy ke FastAPI /market-recap (berita + data + AI)
  * - Simpan riwayat recap ke DB (analysis_requests, type MARKET_RECAP)
- * - Kirim email ke subscriber (opsional — Resend, nonaktif tanpa key)
+ * - Kirim email ke user (Resend) — otomatis bila email enabled
  *
  * Referensi blueprint:
  * - BAGIAN 8.6: POST /analysis/market-recap
@@ -16,7 +17,10 @@ export class MarketRecapService {
   private readonly logger = new Logger(MarketRecapService.name);
   private readonly baseUrl = process.env.AI_SERVICE_URL ?? "http://localhost:8000";
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly emailService: EmailService,
+  ) {}
 
   /** Buat recap baru (opsional: simpan riwayat + kirim email ke user). */
   async generate(userId?: string) {
@@ -45,6 +49,12 @@ export class MarketRecapService {
           status: "COMPLETED",
         },
       });
+
+      // kirim email recap (Resend) — fire & forget, jangan blokir respons
+      const user = await this.prisma.user.findUnique({ where: { id: userId } });
+      if (user?.email && this.emailService.enabled) {
+        void this.emailService.sendMarketRecap(user.email, data.recap, data.date);
+      }
     }
 
     return data;

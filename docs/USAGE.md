@@ -592,3 +592,11 @@ GITHUB_TOKEN=ghp_xxx ./scripts/github-push.sh
 - **Compare** (`/compare`, 🔒): bandingkan 2-5 saham — tabel metrik (harga, PE, ROE, margin) + **AI summary** — `POST /analysis/compare`
 - **Export CSV** (`GET /analysis/export/csv`, 🔒): unduh riwayat analisis sebagai file CSV
 - **Public API** juga sudah punya `POST /public/analysis/stock` & screener untuk developer
+
+### 📧 Email (Resend) & ⚙️ Konfigurasi di Admin Panel
+- **EmailService** terintegrasi Resend — market recap otomatis dikirim ke email user setelah generate
+- **Settings di Admin Panel** (menu "Konfigurasi") — semua konfigurasi dikelola dari UI, tersimpan di DB (tabel `settings`), prinsip *no hardcode*:
+  - `GET /admin/settings` · `GET /admin/settings/:category` · `POST /admin/settings/:category` · `DELETE /admin/settings/:category/:key`
+  - Kategori: general, email, payments, security, notifications, integrations
+  - **Secret** (`isSecret: true`) → nilai disembunyikan saat GET (••••••)
+- Konfigurasi Resend: `RESEND_API_KEY` & `RESEND_FROM_EMAIL` di `apps/api/.env`

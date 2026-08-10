@@ -16,6 +16,8 @@ import { RagModule } from "./modules/rag/rag.module";
 import { ApiKeysModule } from "./modules/api-keys/api-keys.module";
 import { PublicModule } from "./modules/public/public.module";
 import { WatchlistsModule } from "./modules/watchlists/watchlists.module";
+import { EmailModule } from "./modules/email/email.module";
+import { SettingsModule } from "./modules/settings/settings.module";
 
 @Module({
   imports: [
@@ -38,6 +40,8 @@ import { WatchlistsModule } from "./modules/watchlists/watchlists.module";
     ApiKeysModule,
     PublicModule,
     WatchlistsModule,
+    EmailModule,
+    SettingsModule,
   ],
   controllers: [AppController],
 })
