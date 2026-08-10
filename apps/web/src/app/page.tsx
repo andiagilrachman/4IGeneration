@@ -1,8 +1,15 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import { ParticleField } from "@/components/cosmic/particle-field";
 import { NeonCard } from "@/components/cosmic/neon-card";
 import { StatusOrb } from "@/components/cosmic/status-orb";
 import { AIResponseCard } from "@/components/cosmic/ai-response-card";
+
+export const metadata: Metadata = {
+  title: "AI Intelligence Platform for Smart Investing — 4IGeneration",
+  description:
+    "Analisis & screening saham Indonesia dengan AI. Web tools untuk investor retail + Public API untuk developer, fintech & sekuritas.",
+};
 
 /**
  * Landing page (Tier 1: FULL Cosmic Effect — WOW factor).
@@ -16,6 +23,7 @@ const navLinks = [
   { label: "Models", href: "#models" },
   { label: "Pricing", href: "/pricing" },
   { label: "Docs", href: "/docs" },
+  { label: "Blog", href: "/blog" },
 ];
 
 const stats = [
@@ -225,6 +233,7 @@ export default function HomePage() {
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-6 text-xs text-text-muted md:flex-row">
           <p>© 2026 4IGeneration · AI Intelligence Platform for Smart Investing</p>
           <div className="flex items-center gap-6">
+            <Link href="/blog" className="hover:text-text-secondary">Blog</Link>
             <Link href="/docs" className="hover:text-text-secondary">API Docs</Link>
             <Link href="/pricing" className="hover:text-text-secondary">Pricing</Link>
             <Link href="/login" className="hover:text-text-secondary">Login</Link>

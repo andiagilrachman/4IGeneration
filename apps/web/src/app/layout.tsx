@@ -8,9 +8,33 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
-  title: "4IGeneration — AI Intelligence Platform for Smart Investing",
+  title: {
+    default: "4IGeneration — AI Intelligence Platform for Smart Investing",
+    template: "%s — 4IGeneration",
+  },
   description:
     "AI-native platform untuk analisis dan screening saham Indonesia. Simple AI Infrastructure for Developers.",
+  keywords: [
+    "saham Indonesia",
+    "screener saham",
+    "analisis saham AI",
+    "IDX",
+    "investasi",
+    "API saham",
+  ],
+  authors: [{ name: "4IGeneration" }],
+  openGraph: {
+    title: "4IGeneration — AI Intelligence Platform for Smart Investing",
+    description:
+      "AI-native platform untuk analisis dan screening saham Indonesia. Simple AI Infrastructure for Developers.",
+    type: "website",
+    locale: "id_ID",
+    siteName: "4IGeneration",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

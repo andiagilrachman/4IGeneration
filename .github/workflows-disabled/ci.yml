@@ -1,8 +1,5 @@
 # 4IGeneration — CI/CD (GitHub Actions)
 # Referensi blueprint BAGIAN 13 (CI/CD Pipeline)
-#
-# Catatan: jalankan `pnpm install` di lokal dulu agar
-# pnpm-lock.yaml ter-commit, lalu ubah ke --frozen-lockfile.
 name: CI
 
 on:
@@ -19,6 +16,12 @@ jobs:
     name: Lint · Typecheck · Build
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
+    env:
+      # Dibutuhkan saat `next build` (web) — nilai dev, aman untuk CI
+      NEXT_PUBLIC_API_URL: http://localhost:3001/api/v1
+      NEXT_PUBLIC_APP_URL: http://localhost:3000
+      DATABASE_URL: mysql://4ig:4ig_pass@127.0.0.1:3306/4igeneration
 
     steps:
       - name: Checkout

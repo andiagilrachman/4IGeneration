@@ -452,11 +452,40 @@ curl -X POST http://localhost:8000/internal/v1/analyze/stock \
 
 ## 10. Admin Panel
 
-**URL:** http://localhost:3002 · **Teknologi:** Vite + React + Ant Design
+**URL:** http://localhost:3002 · **Teknologi:** Vite + React + Ant Design · **Tema:** dark cosmic (ConfigProvider darkAlgorithm, primary `#7c3aed`)
 
 > Catatan: sesuai prinsip blueprint "no hardcode" — provider, model, dan API keys
 > dikelola **dari UI admin**, bukan dari kode/env. (Refine.dev dijadwalkan sebagai
 > pengganti bertahap; versi ini AntD langsung agar cepat berfungsi.)
+
+### Menu yang tersedia
+| Menu | Fungsi |
+|---|---|
+| Dashboard | Statistik (users, requests, revenue, provider status) |
+| AI Providers | CRUD provider (gemini, openrouter, ollama-local) |
+| AI Models | CRUD model + alias `4IG-*` + harga |
+| Provider Keys | CRUD API key per provider + status aktif |
+| Plans | **CRUD paket subscription** (free/starter/pro) — `GET/POST/PUT/DELETE /admin/plans` |
+| Konfigurasi | Settings per kategori (general, email, payments, security, notifications, integrations) + secret masking |
+
+## 11. Blog & SEO (W35-36)
+
+| Aset | Lokasi / Detail |
+|---|---|
+| Halaman daftar | `/blog` — 6 artikel edukasi (SSG) |
+| Halaman detail | `/blog/[slug]` — `generateStaticParams` + `generateMetadata` (title, description, keywords, OpenGraph, JSON-LD BlogPosting) |
+| Konten | `apps/web/src/lib/blog.ts` (data statis, mudah ditambah) |
+| Sitemap | `/sitemap.xml` — halaman statis + semua artikel |
+| Robots | `/robots.txt` — disallow area privat (`/dashboard`, `/api-keys`, `/billing`, `/api/`) |
+| Metadata global | `layout.tsx` — title template `%s — 4IGeneration`, OG, keywords, robots |
+| Link | Navbar & footer landing → `/blog` |
+
+## 12. CI/CD (GitHub Actions)
+
+- Workflow: `.github/workflows/ci.yml` (aktif di branch `main` & `develop`, trigger push/PR).
+- Job `ci`: install pnpm → `prisma generate` → **lint** → **typecheck** → **build** (API NestJS + Web Next.js).
+- Env CI inline: `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_APP_URL`, `DATABASE_URL` (dev, aman).
+- Semua check lokal terverifikasi bersih sebelum workflow diaktifkan.
 
 ### Login
 | Field | Nilai (seed default) |

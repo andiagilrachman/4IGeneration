@@ -20,7 +20,7 @@
 - [ ] **W4** Cosmic color system ✅ *(tokens sudah di globals.css/tailwind)*
 - [x] **W4** Cosmic components (NeonCard, StatusOrb, ParticleField, AIResponseCard, Button/Input/Card) ✅ *(komponen siap & dipakai)*
 - [x] **W4** Landing page basic ✅ *(hero + fitur + demo AI response, full cosmic)*
-- [ ] **W4** Testing & refinement
+- [x] **W4** Testing & refinement ✅ *(lint, typecheck & build API+web bersih; CI GitHub Actions aktif)*
 
 ### Bulan 2 — AI Gateway & Admin Panel
 - [ ] **W5** FastAPI project ✅ *(scaffold sudah dibuat)*
@@ -69,7 +69,7 @@
 - [x] **W33-34** Watchlist & alerts + Comparison tools + Export data ✅ *(watchlist CRUD, compare 2-5 saham + AI, export CSV)*
 
 > 🏆 **MILESTONE: Phase 3 — Public API SELESAI!** (API key, SDK JS+Python, Docs, Growth features)
-- [ ] **W35-36** Marketing site (landing, blog CMS, SEO)
+- [x] **W35-36** Marketing site (landing, blog, SEO) ✅ *(halaman /blog + /blog/[slug] SSG (6 artikel), sitemap.xml, robots.txt, meta tags + JSON-LD, metadata template)*
 
 > 🏁 **MILESTONE: Public API LIVE + Growth features!**
 
