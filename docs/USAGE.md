@@ -580,3 +580,9 @@ GITHUB_TOKEN=ghp_xxx ./scripts/github-push.sh
 - **Endpoint public**: `GET /public/stocks` · `GET /public/stocks/:ticker` · `POST /public/analysis/screener` · `POST /public/analysis/stock`
 - **Keamanan**: key di-hash bcrypt (prefix 8 char saja yang terlihat) · rate limit 60 req/menit per key (Redis) · usage tercatat (`GET /api-keys/:id/usage`)
 - **Kelola**: buat / cabut (revoke) key di halaman API Keys
+
+### 📦 SDK (W31-32)
+- **JS/TS SDK** (`packages/sdk-js`) — `new FourIG({ apiKey })` → `client.stocks.list()`, `client.stocks.detail("BBCA")`, `client.analysis.screener()`, `client.analysis.stock()`
+- **Python SDK** (`packages/sdk-python`) — `pip install -e packages/sdk-python` → `FourIG(api_key=...)` dengan metode sama
+- **Halaman Developer Docs**: `/docs` (login) — quick start, endpoint, contoh curl, keamanan
+- Kedua SDK teruji live: list 28 saham, detail BBCA (price 6375, ROE 21.8%), screener

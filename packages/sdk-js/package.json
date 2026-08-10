@@ -1,0 +1,15 @@
+{
+  "name": "@4ig/sdk-js",
+  "version": "0.1.0",
+  "private": true,
+  "description": "4IGeneration — JavaScript/TypeScript SDK untuk Public API",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@4ig/tsconfig": "workspace:*",
+    "typescript": "^5.5.4"
+  }
+}

@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "4igeneration-sdk"
+version = "0.1.0"
+description = "4IGeneration Python SDK — Public API untuk data saham IDX & analisis AI"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[tool.setuptools.packages.find]
+include = ["sdk_python*"]
