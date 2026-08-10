@@ -12,6 +12,8 @@ python-dotenv==1.0.1
 yfinance==0.2.54                # Data saham (Yahoo Finance)
 redis==5.0.8                    # Cache (Week 10 — Redis)
 feedparser==6.0.11              # Berita (Week 19-20 — Google News RSS)
+chromadb==1.5.9                 # Vector DB (Week 21-22 — RAG)
+pypdf==5.4.0                    # PDF processing (Week 21-22 — RAG)
 
 # --- Fase 3+ (uncomment saat implementasi fitur lanjutan) ---
 # litellm==1.44.0                 # AI Gateway unified
@@ -19,3 +21,4 @@ feedparser==6.0.11              # Berita (Week 19-20 — Google News RSS)
 # pandas==2.2.2
 # beautifulsoup4==4.12.3          # Scraping berita
 # chromadb==0.5.5                 # Vector DB (RAG, bulan 6)
+python-multipart==0.0.20

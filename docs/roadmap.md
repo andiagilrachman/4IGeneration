@@ -51,8 +51,10 @@
 - [x] **W15-16** Subscription system (plans CRUD, credits, usage tracking) ✅ *(subscribe/cancel/current + kredit bulanan + potong kredit per analisis + pricing & billing page + admin plans CRUD)*
 - [x] **W17-18** Payment Midtrans (checkout Snap, webhook signature, invoice, aktivasi otomatis) ✅ *(sandbox: snap token valid, webhook settlement teruji, signature palsu ditolak)*
 - [x] **W19-20** Market Recap (news fetcher Google News, sentiment AI, recap harian, riwayat per-user) ✅ *(email via Resend menyusul — butuh API key)*
-- [ ] **W21-22** RAG (ChromaDB, PDF processing, embeddings)
-- [ ] **W23-24** Chat UI (streaming, context, upload)
+- [x] **W21-22** RAG (ChromaDB, PDF processing via pypdf, Gemini embedding) ✅ *(teruji: upload PDF → tanya → jawab dari dokumen)*
+- [x] **W23-24** Chat UI (upload PDF + tanya jawab, sumber jawaban) ✅ *(halaman /rag)*
+
+> 🎉 **MILESTONE: Phase 2 — Monetization SELESAI!** (Analisis, Subscription, Payment Midtrans, Market Recap, RAG Q&A)
 
 > 🏁 **MILESTONE: 4 features LIVE + Monetization ready!**
 

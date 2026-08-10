@@ -565,3 +565,10 @@ GITHUB_TOKEN=ghp_xxx ./scripts/github-push.sh
 ---
 
 *Dokumen ini hidup — diperbarui setiap ada pekerjaan selesai. Terakhir: 2026-08-10 (Design System Cosmic).*
+
+### 💬 Q&A Laporan Keuangan (RAG — W21-24)
+- Login → buka **http://localhost:3000/rag** (dari dashboard klik **💬 Q&A**)
+- **Upload PDF** laporan keuangan (maks 20MB) → diproses (pypdf) + dipecah chunk + di-embedding (Gemini) + disimpan ke **ChromaDB**
+- **Tanya apa saja** — AI mencari chunk relevan (vector search) lalu menjawab **berdasarkan isi dokumen** (dengan sumber)
+- Endpoint: `POST /rag/upload` · `GET /rag/documents` · `POST /rag/ask` · `DELETE /rag/documents/:id` (🔒 login)
+- Data vector tersimpan di `.rag_data/` (ter-gitignore)

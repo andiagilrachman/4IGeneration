@@ -12,6 +12,7 @@ import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.modul
 import { CreditsModule } from "./modules/credits/credits.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
 import { MarketRecapModule } from "./modules/market-recap/market-recap.module";
+import { RagModule } from "./modules/rag/rag.module";
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { MarketRecapModule } from "./modules/market-recap/market-recap.module";
     CreditsModule,
     PaymentsModule,
     MarketRecapModule,
+    RagModule,
   ],
   controllers: [AppController],
 })
