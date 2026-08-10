@@ -89,6 +89,27 @@ export class AdminController {
     return this.adminService.deleteKey(id);
   }
 
+  // ---- PLANS (blueprint BAGIAN 9: SUBSCRIPTION & BILLING) ----
+  @Get("plans")
+  listPlans() {
+    return this.adminService.listPlans();
+  }
+
+  @Post("plans")
+  createPlan(@Body() dto: Record<string, unknown>) {
+    return this.adminService.createPlan(dto);
+  }
+
+  @Put("plans/:id")
+  updatePlan(@Param("id") id: string, @Body() dto: Record<string, unknown>) {
+    return this.adminService.updatePlan(id, dto);
+  }
+
+  @Delete("plans/:id")
+  deletePlan(@Param("id") id: string) {
+    return this.adminService.deletePlan(id);
+  }
+
   // ---- MODELS ----
   @Get("models")
   listModels(@Query("providerId") providerId?: string) {

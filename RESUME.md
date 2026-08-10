@@ -74,6 +74,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-10 | feat: Subscription & Credits (W15-16) — plans free/starter/pro, subscribe/cancel/current, kredit bulanan + potong per analisis, pricing & billing page, admin plans CRUD | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: Analisis Emiten (W13-14) — analisis 1 saham data nyata + riwayat per-user (save/lihat/hapus), halaman /analysis, proteksi auth | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: Redis cache (Week 10) — ganti disk cache ke Redis + fallback disk, fail-fast rate-limit, screener 6s→0.019s (300x) | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-09 | feat: admin panel (W7-8) — CRUD AI providers/models/keys via UI (AntD), role guard ADMIN, seed admin, CORS multi-origin, dashboard stats | ✅ Selesai | auto (post-commit hook) |

@@ -7,6 +7,9 @@ import { UsersModule } from "./modules/users/users.module";
 import { StocksModule } from "./modules/stocks/stocks.module";
 import { AnalysisModule } from "./modules/analysis/analysis.module";
 import { AdminModule } from "./modules/admin/admin.module";
+import { PlansModule } from "./modules/plans/plans.module";
+import { SubscriptionsModule } from "./modules/subscriptions/subscriptions.module";
+import { CreditsModule } from "./modules/credits/credits.module";
 
 @Module({
   imports: [
@@ -20,6 +23,9 @@ import { AdminModule } from "./modules/admin/admin.module";
     StocksModule,
     AnalysisModule,
     AdminModule,
+    PlansModule,
+    SubscriptionsModule,
+    CreditsModule,
   ],
   controllers: [AppController],
 })

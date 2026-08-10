@@ -56,6 +56,12 @@ export default function HomePage() {
             Mulai Gratis
           </Link>
           <Link
+            href="/pricing"
+            className="rounded-lg border border-white/10 bg-bg-elevated px-7 py-3 font-semibold text-text-secondary transition-colors hover:border-primary/40 hover:text-text-primary"
+          >
+            Lihat Harga
+          </Link>
+          <Link
             href="/login"
             className="rounded-lg border border-white/10 bg-bg-elevated px-7 py-3 font-semibold text-text-secondary transition-colors hover:border-primary/40 hover:text-text-primary"
           >

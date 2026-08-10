@@ -48,7 +48,7 @@
 ## 🟡 PHASE 2: MONETIZATION (Bulan 4-6)
 
 - [x] **W13-14** Analisis Emiten (prompt, UI, fundamentals, history) ✅ *(halaman /analysis — analisis data nyata + riwayat per-user)*
-- [ ] **W15-16** Subscription system (plans CRUD, credits, usage tracking)
+- [x] **W15-16** Subscription system (plans CRUD, credits, usage tracking) ✅ *(subscribe/cancel/current + kredit bulanan + potong kredit per analisis + pricing & billing page + admin plans CRUD)*
 - [ ] **W17-18** Payment Midtrans (checkout, callback, invoice, webhooks)
 - [ ] **W19-20** Market Recap (news fetcher, sentiment, email)
 - [ ] **W21-22** RAG (ChromaDB, PDF processing, embeddings)

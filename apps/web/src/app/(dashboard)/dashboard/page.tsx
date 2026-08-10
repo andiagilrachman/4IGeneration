@@ -54,7 +54,7 @@ export default function DashboardPage() {
               Selamat datang, <span className="text-highlight">{user.name ?? user.email}</span> 👋
             </p>
           </div>
-          <div className="flex gap-3">
+          <div className="flex flex-wrap gap-3">
             <Link href="/analysis">
               <Button variant="outline">🧠 Analisis</Button>
             </Link>
@@ -63,6 +63,9 @@ export default function DashboardPage() {
             </Link>
             <Link href="/market">
               <Button variant="outline">📈 Market</Button>
+            </Link>
+            <Link href="/billing">
+              <Button variant="outline">💳 Billing</Button>
             </Link>
             <Button variant="danger" onClick={handleLogout}>
               Keluar

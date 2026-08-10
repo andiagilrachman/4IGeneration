@@ -213,6 +213,13 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 | GET | `/stocks` | — | Daftar saham IDX likuid (28 saham) |
 | GET | `/stocks/:ticker` | — | Data saham nyata (harga, PE, ROE, range 52w, 5 hari) |
 | GET | `/stocks/sectors` | — | Daftar sektor unik (dropdown screener) |
+| GET | `/plans` | — | Daftar plan (public) — free/starter/pro |
+| GET | `/plans/:slug` | — | Detail satu plan |
+| GET | `/subscriptions/current` | 🔒 | Subscription aktif + saldo kredit |
+| POST | `/subscriptions/subscribe` | 🔒 | Subscribe ke plan (slug) → alokasi kredit bulanan |
+| POST | `/subscriptions/cancel` | 🔒 | Batalkan langganan |
+| GET | `/credits/balance` | 🔒 | Saldo kredit user |
+| GET | `/credits/transactions` | 🔒 | Riwayat transaksi kredit |
 | POST | `/analysis/screener` | — | **AI-powered screener** (filter fundamental + opsi analisis AI) |
 | POST | `/analysis/stock` | 🔒 | Analisis 1 saham (data nyata) + **tersimpan ke riwayat** |
 | GET | `/analysis/history` | 🔒 | Riwayat analisis user (terbaru di atas) |
@@ -243,6 +250,13 @@ curl -X POST http://localhost:3001/api/v1/analysis/screener \
   -H "Content-Type: application/json" \
   -d '{"min_roe":0.15,"limit":10,"analyze":true}'
 ```
+
+### 💳 Subscription & Kredit (W15-16)
+- **Pricing page** (public): http://localhost:3000/pricing — free (Rp 0), starter (Rp 99rb/bln), pro (Rp 299rb/bln)
+- **Billing page** (login): http://localhost:3000/billing — lihat plan aktif, saldo kredit, riwayat transaksi, subscribe/upgrade/cancel
+- **Kredit**: 1 kredit = 1 analisis saham AI. Subscribe → +kredit bulanan (mis. starter = 100) → analisis menguranginya
+- **Seed plan** (jika DB baru): `pnpm --filter @4ig/api seed:plans`
+- ⚠️ Payment gateway (Midtrans) belum terhubung — subscribe saat ini langsung aktif (integrasi payment = W17-18)
 
 ### 🧠 Cara pakai Analisis Emiten
 1. Login → buka **http://localhost:3000/analysis** (dari dashboard klik **🧠 Analisis**)

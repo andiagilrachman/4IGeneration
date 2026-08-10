@@ -201,4 +201,57 @@ export class AdminService {
     await this.prisma.aiModel.delete({ where: { id } });
     return { deleted: true };
   }
+
+  // ------------------------------------------------------------------
+  // PLANS (kelola harga & kuota plan)
+  // ------------------------------------------------------------------
+  listPlans() {
+    return this.prisma.plan.findMany({ orderBy: { sortOrder: "asc" } });
+  }
+
+  createPlan(dto: Record<string, unknown>) {
+    return this.prisma.plan.create({
+      data: {
+        slug: String(dto.slug ?? "").toLowerCase().trim(),
+        name: String(dto.name ?? ""),
+        description: dto.description ? String(dto.description) : undefined,
+        type: (dto.type as "FREE" | "RETAIL" | "API" | "ENTERPRISE") ?? "RETAIL",
+        priceMonthly: Number(dto.priceMonthly ?? 0),
+        priceYearly: dto.priceYearly !== undefined ? Number(dto.priceYearly) : null,
+        currency: String(dto.currency ?? "IDR"),
+        creditsPerMonth: Number(dto.creditsPerMonth ?? 0),
+        features: (dto.features as object) ?? undefined,
+        isActive: dto.isActive !== undefined ? Boolean(dto.isActive) : true,
+        sortOrder: Number(dto.sortOrder ?? 0),
+      },
+    });
+  }
+
+  async updatePlan(id: string, dto: Record<string, unknown>) {
+    const p = await this.prisma.plan.findUnique({ where: { id } });
+    if (!p) throw new NotFoundException("Plan tidak ditemukan");
+    return this.prisma.plan.update({
+      where: { id },
+      data: {
+        ...(dto.slug !== undefined ? { slug: String(dto.slug).toLowerCase().trim() } : {}),
+        ...(dto.name !== undefined ? { name: String(dto.name) } : {}),
+        ...(dto.description !== undefined ? { description: String(dto.description) } : {}),
+        ...(dto.type !== undefined ? { type: dto.type as never } : {}),
+        ...(dto.priceMonthly !== undefined ? { priceMonthly: Number(dto.priceMonthly) } : {}),
+        ...(dto.priceYearly !== undefined ? { priceYearly: Number(dto.priceYearly) } : {}),
+        ...(dto.currency !== undefined ? { currency: String(dto.currency) } : {}),
+        ...(dto.creditsPerMonth !== undefined ? { creditsPerMonth: Number(dto.creditsPerMonth) } : {}),
+        ...(dto.features !== undefined ? { features: dto.features as object } : {}),
+        ...(dto.isActive !== undefined ? { isActive: Boolean(dto.isActive) } : {}),
+        ...(dto.sortOrder !== undefined ? { sortOrder: Number(dto.sortOrder) } : {}),
+      },
+    });
+  }
+
+  async deletePlan(id: string) {
+    const p = await this.prisma.plan.findUnique({ where: { id } });
+    if (!p) throw new NotFoundException("Plan tidak ditemukan");
+    await this.prisma.plan.delete({ where: { id } });
+    return { deleted: true };
+  }
 }

@@ -1,20 +1,27 @@
 import { Injectable, Logger, NotFoundException } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
+import { CreditsService } from "../credits/credits.service";
+
+const CREDIT_COST_PER_ANALYSIS = 1; // 1 kredit per analisis saham (MVP)
 
 /**
- * AnalysisService — analisis AI 1 saham + simpan riwayat ke DB.
- * Arsitektur: Web → NestJS (auth + save) → FastAPI (AI gateway + data) → provider AI
+ * AnalysisService — analisis AI 1 saham + simpan riwayat + potong kredit.
+ * Arsitektur: Web → NestJS (auth + credit + save) → FastAPI (AI gateway + data) → provider AI
  *
  * Referensi blueprint:
  * - BAGIAN 8.6: POST /analysis/stock, GET /analysis/history, GET /analysis/:id, DELETE /analysis/:id
- * - W13-14 roadmap: Analisis Emiten + save history (menuju Phase 2)
+ * - W13-14 roadmap: Analisis Emiten + save history
+ * - W15-16 roadmap: integrasi credits — setiap analisis memakai kredit
  */
 @Injectable()
 export class AnalysisService {
   private readonly logger = new Logger(AnalysisService.name);
   private readonly baseUrl = process.env.AI_SERVICE_URL ?? "http://localhost:8000";
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly creditsService: CreditsService,
+  ) {}
 
   private async proxy<T>(path: string, body: unknown): Promise<T> {
     const res = await fetch(`${this.baseUrl}/internal/v1${path}`, {
@@ -40,10 +47,21 @@ export class AnalysisService {
   }
 
   /**
-   * Analisis 1 saham (data nyata + AI), lalu simpan ke tabel analysis_requests.
-   * Butuh userId (dari JWT) agar riwayat bisa dilacak per user.
+   * Analisis 1 saham (data nyata + AI), potong kredit, lalu simpan ke DB.
+   * Butuh userId (dari JWT) — riwayat & kredit per user.
    */
   async analyzeStock(ticker: string, userId?: string) {
+    // 1) potong kredit sebelum eksekusi (user login saja; anonim = tidak diproses)
+    let creditInfo = { balance: 0, spent: 0 };
+    if (userId) {
+      creditInfo = await this.creditsService.spend(
+        userId,
+        CREDIT_COST_PER_ANALYSIS,
+        `Analisis saham ${ticker.toUpperCase()}`,
+      );
+    }
+
+    // 2) jalankan analisis AI
     const data = await this.proxy<{ success: boolean; data: unknown }>("/analyze/stock", {
       ticker,
     });
@@ -56,7 +74,7 @@ export class AnalysisService {
       response_time_ms?: number;
     };
 
-    // simpan ke DB bila user login (riwayat)
+    // 3) simpan ke DB bila user login (riwayat)
     let saved: { id: string } | null = null;
     if (userId) {
       saved = await this.prisma.analysisRequest.create({
@@ -68,13 +86,18 @@ export class AnalysisService {
           provider: result.provider ?? null,
           modelAlias: result.model_alias ?? null,
           status: "COMPLETED",
+          creditsCost: creditInfo.spent,
           responseTimeMs: result.response_time_ms ?? null,
         },
         select: { id: true },
       });
     }
 
-    return { ...result, id: saved?.id ?? null };
+    return {
+      ...result,
+      id: saved?.id ?? null,
+      credits: creditInfo,
+    };
   }
 
   /** Riwayat analisis milik user (terbaru di atas). */
