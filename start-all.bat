@@ -13,7 +13,7 @@ echo  - Admin Panel : http://localhost:3002
 echo.
 
 start "4IG AI Service (8000)" cmd /k "cd /d %~dp0apps\ai-service && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000"
-start "4IG API (3001)" cmd /k "cd /d %~dp0apps\api && set DATABASE_URL=mysql://4ig:4ig_pass@localhost:3306/4igeneration && set JWT_SECRET=test-secret-4ig && set JWT_REFRESH_SECRET=test-refresh-4ig && set AI_SERVICE_URL=http://localhost:8000 && set CORS_ORIGINS=http://localhost:3000,http://localhost:3002 && set PORT=3001 && npm run start:dev"
+start "4IG API (3001)" cmd /k "cd /d %~dp0apps\api && set DATABASE_URL=mysql://root:@localhost:3306/4igeneration && set JWT_SECRET=test-secret-4ig && set JWT_REFRESH_SECRET=test-refresh-4ig && set AI_SERVICE_URL=http://localhost:8000 && set CORS_ORIGINS=http://localhost:3000,http://localhost:3002 && set PORT=3001 && npm run start:dev"
 start "4IG Web (3000)" cmd /k "cd /d %~dp0apps\web && npm run dev"
 start "4IG Admin (3002)" cmd /k "cd /d %~dp0apps\admin && npm run dev"
 

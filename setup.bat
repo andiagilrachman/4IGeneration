@@ -35,7 +35,21 @@ REM ---------- 4. Env files ----------
 if not exist "apps\web\.env.local" copy "apps\web\.env.example" "apps\web\.env.local" >nul
 if not exist "apps\admin\.env.local" copy "apps\admin\.env.example" "apps\admin\.env.local" >nul
 if not exist "apps\api\.env" copy "apps\api\.env.example" "apps\api\.env" >nul
-echo [OK] File .env dibuat (cek & isi API key di apps\api\.env).
+echo [OK] File .env dibuat.
+
+REM ---------- 4b. Pilih koneksi database ----------
+echo.
+echo  Pilih koneksi MySQL:
+echo   [1] root tanpa password (XAMPP default)  ^<- REKOMENDASI
+echo   [2] user khusus 4ig / 4ig_pass
+set /p DBCHOICE="Pilihan (1/2): "
+if "%DBCHOICE%"=="2" (
+  set DBURL=mysql://4ig:4ig_pass@localhost:3306/4igeneration
+) else (
+  set DBURL=mysql://root:@localhost:3306/4igeneration
+)
+echo [OK] DATABASE_URL = %DBURL%
+echo Setelah setup, pastikan nilai di apps\api\.env sama dengan di atas.
 
 REM ---------- 5. Prisma generate + migrate + seed ----------
 echo [..] Prisma generate...
@@ -49,6 +63,7 @@ echo   (lihat PANDUAN-INSTALL-WINDOWS.md langkah 3)
 echo  ============================================
 echo.
 set /p LANJUT="Database sudah siap? Tekan Enter untuk migrasi..."
+set DATABASE_URL=%DBURL%
 call npx prisma migrate deploy
 call npx ts-node scripts\seed-admin.ts
 call npx ts-node scripts\seed-plans.ts

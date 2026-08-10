@@ -48,29 +48,31 @@ cd 4IGeneration
 1. Buka **XAMPP Control Panel** → Start **MySQL** (Apache tidak wajib).
 2. Buka **phpMyAdmin** (http://localhost/phpmyadmin).
 3. Klik **New** → buat database bernama `4igeneration` (collation: `utf8mb4_unicode_ci`).
-4. Buat user MySQL:
-   ```sql
-   -- jalankan di tab SQL phpMyAdmin
-   CREATE USER '4ig'@'localhost' IDENTIFIED BY '4ig_pass';
-   GRANT ALL PRIVILEGES ON 4igeneration.* TO '4ig'@'localhost';
-   FLUSH PRIVILEGES;
-   ```
-   > Jika root XAMPP tidak pakai password, kamu bisa langsung pakai `root` tanpa password
-   > (ubah `DATABASE_URL` di langkah 4).
+4. **TIDAK perlu membuat user baru** — pakai user `root` tanpa password (default XAMPP).
+   > Jika kamu tetap ingin pakai user khusus (`4ig`), buat lewat tab SQL:
+   > ```sql
+   > CREATE USER '4ig'@'localhost' IDENTIFIED BY '4ig_pass';
+   > GRANT ALL PRIVILEGES ON 4igeneration.* TO '4ig'@'localhost';
+   > FLUSH PRIVILEGES;
+   > ```
+   > ⚠️ Kalau muncul error `#1034 - table db corrupt` saat GRANT, itu kerusakan tabel sistem
+   > MySQL (bukan project). **Pakai saja user `root`** — tidak wajib membuat user baru.
+   > Perbaikan opsional: `C:\xampp\mysql\bin\mysqlcheck.exe -u root --repair mysql db`
 
 ---
 
 ## 4. Setup File .env
 
-Salin `.env.example` → `.env` di **root project**, lalu cek baris ini:
+Salin `.env.example` → `.env` di **root project**, lalu ubah baris koneksi database:
 
 ```
-DATABASE_URL="mysql://4ig:4ig_pass@localhost:3306/4igeneration"
+DATABASE_URL="mysql://root:@localhost:3306/4igeneration"
 REDIS_URL="redis://localhost:6379"
 ```
 
-- Jika MySQL tanpa password (user root): `DATABASE_URL="mysql://root:@localhost:3306/4igeneration"`
-- Redis di Windows tidak wajib untuk mulai — aplikasi tetap jalan (fallback disk cache).
+> 💡 **XAMPP default:** user `root`, tanpa password → `mysql://root:@localhost:3306/4igeneration`
+> Jika kamu membuat user khusus `4ig`, pakai: `mysql://4ig:4ig_pass@localhost:3306/4igeneration`
+> Redis di Windows tidak wajib untuk mulai — aplikasi tetap jalan (fallback disk cache).
 
 Buat juga file env per app:
 ```bat
