@@ -220,6 +220,10 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 | POST | `/subscriptions/cancel` | 🔒 | Batalkan langganan |
 | GET | `/credits/balance` | 🔒 | Saldo kredit user |
 | GET | `/credits/transactions` | 🔒 | Riwayat transaksi kredit |
+| POST | `/payments/create` | 🔒 | Buat transaksi Midtrans Snap (planSlug) → snap token |
+| GET | `/payments` | 🔒 | Riwayat pembayaran (+ invoice) |
+| GET | `/payments/:id` | 🔒 | Detail pembayaran |
+| POST | `/payments/webhook/midtrans` | — | Notifikasi Midtrans (public, signature SHA512 diverifikasi) |
 | POST | `/analysis/screener` | — | **AI-powered screener** (filter fundamental + opsi analisis AI) |
 | POST | `/analysis/stock` | 🔒 | Analisis 1 saham (data nyata) + **tersimpan ke riwayat** |
 | GET | `/analysis/history` | 🔒 | Riwayat analisis user (terbaru di atas) |
@@ -251,12 +255,21 @@ curl -X POST http://localhost:3001/api/v1/analysis/screener \
   -d '{"min_roe":0.15,"limit":10,"analyze":true}'
 ```
 
-### 💳 Subscription & Kredit (W15-16)
+### 💳 Subscription, Kredit & Payment (W15-18)
 - **Pricing page** (public): http://localhost:3000/pricing — free (Rp 0), starter (Rp 99rb/bln), pro (Rp 299rb/bln)
-- **Billing page** (login): http://localhost:3000/billing — lihat plan aktif, saldo kredit, riwayat transaksi, subscribe/upgrade/cancel
+- **Billing page** (login): http://localhost:3000/billing — lihat plan aktif, saldo kredit, riwayat transaksi, **💳 Bayar & Aktifkan** (Midtrans Snap)
 - **Kredit**: 1 kredit = 1 analisis saham AI. Subscribe → +kredit bulanan (mis. starter = 100) → analisis menguranginya
 - **Seed plan** (jika DB baru): `pnpm --filter @4ig/api seed:plans`
-- ⚠️ Payment gateway (Midtrans) belum terhubung — subscribe saat ini langsung aktif (integrasi payment = W17-18)
+
+#### Alur pembayaran Midtrans (sandbox, W17-18)
+1. Klik **💳 Bayar & Aktifkan** di billing → `POST /payments/create` → dapat snap token
+2. Snap popup terbuka (atau klik **Buka Halaman Bayar** bila popup gagal dimuat)
+3. Bayar pakai **kartu test sandbox**: `4811 1111 1111 1114` (sukses), OTP `112233`
+4. Midtrans kirim webhook → payment **PAID** + subscription **ACTIVE** + kredit masuk + **invoice** dibuat otomatis
+5. Konfigurasi: `MIDTRANS_SERVER_KEY` / `MIDTRANS_CLIENT_KEY` di `apps/api/.env` (sandbox: `SB-Mid-...`, `MIDTRANS_IS_PRODUCTION=false`)
+6. Webhook signature SHA512 diverifikasi (payload palsu → 400)
+
+> ⚠️ Di preview sandbox (iframe tanpa internet), Snap popup tidak bisa dimuat — gunakan tombol **Buka Halaman Bayar** (buka di tab browser). Di VPS/domain produksi, semuanya jalan normal.
 
 ### 🧠 Cara pakai Analisis Emiten
 1. Login → buka **http://localhost:3000/analysis** (dari dashboard klik **🧠 Analisis**)

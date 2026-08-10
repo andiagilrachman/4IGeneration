@@ -1,8 +1,12 @@
 "use client";
 
 /**
- * Billing — subscription & kredit user (W15-16).
- * Melihat plan aktif, saldo kredit, riwayat transaksi, subscribe/upgrade/cancel.
+ * Billing — subscription, kredit, & pembayaran Midtrans Snap (W17-18).
+ * Alur bayar: pilih plan → POST /payments/create → Snap popup (atau redirect)
+ * → Midtrans kirim webhook → subscription aktif + kredit masuk otomatis.
+ *
+ * Catatan: Snap popup butuh akses internet dari browser pengguna.
+ * Di preview sandbox (iframe tanpa network) gunakan tombol "Buka Halaman Bayar".
  */
 
 import { useCallback, useEffect, useState } from "react";
@@ -38,6 +42,20 @@ interface Txn {
   createdAt: string;
 }
 
+interface PaymentData {
+  paymentId: string;
+  orderId: string;
+  snapToken: string;
+  redirectUrl: string;
+  amount: number;
+  plan: { slug: string; name: string };
+}
+
+// client key Midtrans (public — aman diekspos)
+const MIDTRANS_CLIENT_KEY =
+  process.env.NEXT_PUBLIC_MIDTRANS_CLIENT_KEY ?? "SB-Mid-client-bEhCDc0GPOlRITJn";
+const MIDTRANS_SNAP_JS = "https://app.sandbox.midtrans.com/snap/snap.js";
+
 export default function BillingPage() {
   const router = useRouter();
   const user = useAuthStore((s) => s.user);
@@ -47,6 +65,8 @@ export default function BillingPage() {
   const [current, setCurrent] = useState<Current | null>(null);
   const [txns, setTxns] = useState<Txn[]>([]);
   const [busy, setBusy] = useState(false);
+  const [paying, setPaying] = useState<Plan | null>(null);
+  const [pendingPayment, setPendingPayment] = useState<PaymentData | null>(null);
 
   const load = useCallback(async () => {
     const [p, c, t] = await Promise.all([
@@ -67,10 +87,67 @@ export default function BillingPage() {
     }
   }, [isHydrated, user, router, load]);
 
-  async function subscribe(slug: string) {
+  /** Inject script Snap Midtrans sekali. */
+  function loadSnap(): Promise<boolean> {
+    return new Promise((resolve) => {
+      if ((window as unknown as { snap?: unknown }).snap) {
+        resolve(true);
+        return;
+      }
+      const s = document.createElement("script");
+      s.src = MIDTRANS_SNAP_JS;
+      s.setAttribute("data-client-key", MIDTRANS_CLIENT_KEY);
+      s.onload = () => resolve(true);
+      s.onerror = () => resolve(false);
+      document.body.appendChild(s);
+    });
+  }
+
+  async function pay(plan: Plan) {
+    setBusy(true);
+    setPaying(plan);
+    try {
+      const data = await apiFetch<PaymentData>("/payments/create", {
+        method: "POST",
+        body: { planSlug: plan.slug },
+      });
+      setPendingPayment(data);
+
+      // coba buka Snap popup (butuh internet browser)
+      const ok = await loadSnap();
+      if (ok) {
+        const snap = (window as unknown as {
+          snap: { pay: (token: string, cb?: (r: { transaction_status: string }) => void) => void };
+        }).snap;
+        snap.pay(data.snapToken, (result) => {
+          if (result.transaction_status === "settlement" || result.transaction_status === "capture") {
+            alert("✅ Pembayaran berhasil! Subscription & kredit Anda sudah aktif.");
+            setPendingPayment(null);
+            load();
+          } else if (result.transaction_status === "pending") {
+            alert("Pembayaran menunggu konfirmasi. Cek lagi nanti.");
+          } else {
+            alert("Pembayaran belum selesai / dibatalkan.");
+          }
+        });
+      } else {
+        alert(
+          "Gagal memuat Snap popup (mungkin preview sandbox tanpa internet). " +
+            "Gunakan tombol 'Buka Halaman Bayar'.",
+        );
+      }
+    } catch (e) {
+      alert((e as Error).message);
+    } finally {
+      setBusy(false);
+      setPaying(null);
+    }
+  }
+
+  async function subscribeFree() {
     setBusy(true);
     try {
-      await apiFetch("/subscriptions/subscribe", { method: "POST", body: { planSlug: slug } });
+      await apiFetch("/subscriptions/subscribe", { method: "POST", body: { planSlug: "free" } });
       await load();
     } catch (e) {
       alert((e as Error).message);
@@ -105,7 +182,9 @@ export default function BillingPage() {
     <main className="min-h-screen bg-bg-base px-6 py-10 text-text-primary">
       <div className="mx-auto max-w-5xl">
         <h1 className="font-display text-3xl font-bold">Billing &amp; Kredit</h1>
-        <p className="mt-1 text-text-muted">Kelola langganan &amp; saldo kredit Anda</p>
+        <p className="mt-1 text-text-muted">
+          Kelola langganan &amp; saldo kredit Anda — pembayaran via Midtrans
+        </p>
 
         {/* Status kartu */}
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -155,20 +234,46 @@ export default function BillingPage() {
                   <Button
                     variant="outline"
                     className="w-full"
-                    onClick={() => subscribe("free")}
+                    onClick={subscribeFree}
                     disabled={busy}
                   >
                     Pilih Free
                   </Button>
                 ) : (
-                  <Button className="w-full" onClick={() => subscribe(p.slug)} disabled={busy}>
-                    {activeSlug ? "Upgrade ke " + p.name : "Pilih " + p.name}
+                  <Button className="w-full" onClick={() => pay(p)} disabled={busy}>
+                    {paying?.slug === p.slug ? "Memproses..." : "💳 Bayar & Aktifkan"}
                   </Button>
                 )}
               </div>
             </Card>
           ))}
         </div>
+
+        {/* Panel pembayaran aktif */}
+        {pendingPayment && (
+          <Card variant="cosmic" className="mt-6">
+            <p className="font-mono text-xs text-highlight">◉ MENUNGGU PEMBAYARAN</p>
+            <p className="mt-2">
+              Order <span className="font-mono">{pendingPayment.orderId}</span> · Rp{" "}
+              {pendingPayment.amount.toLocaleString("id-ID")} ·{" "}
+              {pendingPayment.plan.name}
+            </p>
+            <p className="mt-2 text-sm text-text-muted">
+              Snap popup gagal dimuat? Buka halaman pembayaran Midtrans di browser:
+            </p>
+            <a
+              href={pendingPayment.redirectUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-2 inline-block rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white hover:bg-primary-hover"
+            >
+              Buka Halaman Bayar ↗
+            </a>
+            <p className="mt-2 text-xs text-text-disabled">
+              Setelah bayar, tunggu konfirmasi (webhook Midtrans) lalu muat ulang halaman.
+            </p>
+          </Card>
+        )}
 
         {current?.subscription && (
           <div className="mt-4 flex items-center gap-3">

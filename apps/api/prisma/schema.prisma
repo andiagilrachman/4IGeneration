@@ -52,6 +52,7 @@ model User {
   analysis        AnalysisRequest[]
   notifications   Notification[]
   auditLogs       AuditLog[]
+  payments        Payment[]
 
   @@index([status])
   @@map("users")
@@ -238,6 +239,7 @@ model Payment {
   updatedAt     DateTime      @updatedAt @map("updated_at")
 
   invoice       Invoice?
+  user          User          @relation(fields: [userId], references: [id])
 
   @@index([userId])
   @@index([status])
