@@ -75,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-10 | docs: panduan install Windows + setup.bat + start-all.bat — jalankan project di komputer sendiri dengan XAMPP | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | chore(env): betulkan konfigurasi database di root .env.example — MYSQL_DATABASE jadi nama db saja, tambah DATABASE_URL & REDIS_URL konsisten (4ig/4ig_pass), bersihkan artefak link | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: aktifkan CI workflow (lint/typecheck/build) + Blog & SEO (6 artikel SSG, sitemap, robots, JSON-LD, metadata) + eslint config API | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: verifikasi email + reset password (auth), restyle semua halaman ke Signature Look via shared dashboard layout, admin panel dark theme + halaman Plans | ✅ Selesai | auto (post-commit hook) |
