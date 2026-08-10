@@ -10,11 +10,12 @@
 
 | Item | Status |
 |---|---|
-| 🎯 Fase aktif | **Phase 1 — Foundation (Bulan 1-3)** |
-| 📊 Progres keseluruhan (roadmap 12 bulan) | **~6%** |
-| 🏁 Milestone terdekat | **Screener MVP LIVE** 🎉 (Week 11-12 selesai) — berikutnya: Admin Panel (W7-8), Redis cache (W10) |
-| 🗂 Repositori git | ✅ Terinisialisasi (branch `main`, commit awal dibuat) |
-| ☁️ Remote (GitHub) | ✅ **Terhubung & ter-push** → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) || 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
+| 🎯 Fase aktif | **Phase 4 — Scale & Own Model (persiapan infra)** — Phase 1-3 selesai |
+| 📊 Progres keseluruhan (roadmap 12 bulan) | **~75%** (Phase 1-3 LIVE + Phase 4 prep) |
+| 🏁 Milestone terdekat | **Stabil di lokal** (keputusan user: deploy VPS ditunda sampai ada revisi) — loose end: verifikasi email & reset password, CI workflow |
+| 🗂 Repositori git | ✅ Terinisialisasi (branch `main`) |
+| ☁️ Remote (GitHub) | ✅ **Terhubung & ter-push** → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) |
+| 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
 | 📓 Sistem resume otomatis | ✅ `scripts/resume.sh` + post-commit hook |
 
 ## 📊 Progres per Fase (Roadmap 12 Bulan)
@@ -74,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-10 | feat: Email (Resend) + Settings di Admin Panel (W19-20 follow-up) — market recap otomatis via email, konfigurasi no-hardcode di DB (CRUD settings, secret masking), halaman Konfigurasi di admin | ✅ Selesai | commit 9b99613 (dibackup sesi ini) |
 | 2026-08-10 | feat: Phase 4 prep (W37-42) — provider Ollama/local model di AI Gateway, config env, script dataset fine-tune (Alpaca JSONL), panduan PHASE4-OWN-MODEL.md, health status local model | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: Growth Features (W33-34) — watchlist CRUD, compare 2-5 saham + AI summary, export CSV. 🏆 Phase 3 (Public API) SELESAI | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: SDK JS & Python (W31-32) + Developer Docs (W27-28) — SDK teruji live, halaman /docs, contoh curl & keamanan | ✅ Selesai | auto (post-commit hook) |
