@@ -572,3 +572,11 @@ GITHUB_TOKEN=ghp_xxx ./scripts/github-push.sh
 - **Tanya apa saja** — AI mencari chunk relevan (vector search) lalu menjawab **berdasarkan isi dokumen** (dengan sumber)
 - Endpoint: `POST /rag/upload` · `GET /rag/documents` · `POST /rag/ask` · `DELETE /rag/documents/:id` (🔒 login)
 - Data vector tersimpan di `.rag_data/` (ter-gitignore)
+
+### 🔑 Public API & API Keys (Phase 3 — W25-28)
+- Login → buka **http://localhost:3000/api-keys** → buat API key (nama aplikasi)
+- **Key format**: `4IG_<prefix8>_<secret32>` — plain key tampil SEKALI (simpan baik-baik)
+- Pakai di header: `X-API-Key: 4IG_...` pada endpoint `/api/v1/public/*`
+- **Endpoint public**: `GET /public/stocks` · `GET /public/stocks/:ticker` · `POST /public/analysis/screener` · `POST /public/analysis/stock`
+- **Keamanan**: key di-hash bcrypt (prefix 8 char saja yang terlihat) · rate limit 60 req/menit per key (Redis) · usage tercatat (`GET /api-keys/:id/usage`)
+- **Kelola**: buat / cabut (revoke) key di halaman API Keys

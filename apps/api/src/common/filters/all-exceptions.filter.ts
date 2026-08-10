@@ -34,7 +34,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
         message = body;
       } else if (body && typeof body === "object") {
         const b = body as Record<string, unknown>;
-        code = (b.code as string) ?? (b.error as string)?.toUpperCase().replace(/\s+/g, "_") ?? "HTTP_ERROR";
+        const errStr =
+          typeof b.error === "string" ? b.error : typeof b.message === "string" ? b.message : "";
+        code = (b.code as string) ?? (errStr.toUpperCase().replace(/\s+/g, "_") || "HTTP_ERROR");
         message = Array.isArray(b.message) ? b.message.join(", ") : ((b.message as string) ?? message);
         if (Array.isArray(b.message)) details = b.message;
       }

@@ -60,7 +60,7 @@
 
 ## 🟢 PHASE 3: PUBLIC API (Bulan 7-9)
 
-- [ ] **W25-26** API key system (generation, scopes, rate limit, usage)
+- [x] **W25-26** API key system (generation 4IG_*, bcrypt hash, rate limit Redis, usage tracking) ✅ *(teruji: 401 tanpa key, usage tercatat)*
 - [ ] **W27-28** Developer portal (docs, playground, examples, SDK plan)
 - [ ] **W29-30** Public endpoints standar (format, error, versioning)
 - [ ] **W31-32** SDK JS + Python, Postman collection

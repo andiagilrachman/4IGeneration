@@ -13,6 +13,8 @@ import { CreditsModule } from "./modules/credits/credits.module";
 import { PaymentsModule } from "./modules/payments/payments.module";
 import { MarketRecapModule } from "./modules/market-recap/market-recap.module";
 import { RagModule } from "./modules/rag/rag.module";
+import { ApiKeysModule } from "./modules/api-keys/api-keys.module";
+import { PublicModule } from "./modules/public/public.module";
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { RagModule } from "./modules/rag/rag.module";
     PaymentsModule,
     MarketRecapModule,
     RagModule,
+    ApiKeysModule,
+    PublicModule,
   ],
   controllers: [AppController],
 })

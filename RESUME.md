@@ -74,6 +74,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-10 | feat: Public API & API Keys (W25-28) — API key 4IG_* (bcrypt hash), rate limit Redis, usage tracking, endpoint /public/* (stocks, screener, analysis), halaman /api-keys + fix AllExceptionsFilter | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: RAG Q&A (W21-24) — upload PDF laporan keuangan, ChromaDB + Gemini embedding, tanya jawab berbasis dokumen, halaman /rag. 🎉 Phase 2 (Monetization) SELESAI | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: Market Recap (W19-20) — news fetcher Google News RSS, sentiment AI, recap harian (berita+data+AI), riwayat per-user, halaman /market-recap | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | feat: Midtrans Payment (W17-18) — Snap checkout, webhook signature SHA512, aktivasi subscription + kredit + invoice otomatis, billing page bayar, sandbox teruji | ✅ Selesai | auto (post-commit hook) |
