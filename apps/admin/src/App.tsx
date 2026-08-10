@@ -13,15 +13,17 @@ import Dashboard from "./pages/Dashboard";
 import Providers from "./pages/Providers";
 import Models from "./pages/Models";
 import Keys from "./pages/Keys";
+import Plans from "./pages/Plans";
 import Settings from "./pages/Settings";
 
-type PageKey = "dashboard" | "providers" | "models" | "keys" | "settings";
+type PageKey = "dashboard" | "providers" | "models" | "keys" | "plans" | "settings";
 
 const menuItems = [
   { key: "dashboard", icon: <DashboardOutlined />, label: "Dashboard" },
   { key: "providers", icon: <ApiOutlined />, label: "AI Providers" },
   { key: "models", icon: <RobotOutlined />, label: "AI Models" },
   { key: "keys", icon: <KeyOutlined />, label: "Provider Keys" },
+  { key: "plans", icon: <SettingOutlined />, label: "Plans" },
   { key: "settings", icon: <SettingOutlined />, label: "Konfigurasi" },
 ];
 
@@ -49,8 +51,8 @@ function LoginScreen({ onLogin }: { onLogin: () => void }) {
         background: "#0a0a0f",
       }}
     >
-      <div style={{ width: 360, padding: 32, background: "#fff", borderRadius: 12 }}>
-        <Typography.Title level={3} style={{ marginBottom: 4 }}>
+      <div style={{ width: 360, padding: 32, background: "#0f1424", borderRadius: 12, border: "1px solid rgba(124,58,237,0.3)", boxShadow: "0 0 30px rgba(124,58,237,0.25)" }}>
+        <Typography.Title level={3} style={{ marginBottom: 4, color: "#c4b5fd" }}>
           🛸 4IGeneration Admin
         </Typography.Title>
         <Typography.Paragraph type="secondary">
@@ -124,11 +126,12 @@ export default function App() {
         </div>
       </Layout.Sider>
       <Layout>
-        <Layout.Content style={{ padding: 24, background: "#f5f5f5" }}>
+        <Layout.Content style={{ padding: 24, background: "#070b18", minHeight: "100vh" }}>
           {page === "dashboard" && <Dashboard />}
           {page === "providers" && <Providers />}
           {page === "models" && <Models />}
           {page === "keys" && <Keys />}
+          {page === "plans" && <Plans />}
           {page === "settings" && <Settings />}
         </Layout.Content>
       </Layout>

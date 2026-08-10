@@ -88,16 +88,16 @@ export default function MarketRecapPage() {
 
   if (!isHydrated || !user) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-bg-base text-text-muted">
+      <p className="py-16 text-center text-text-muted">
         Memuat...
-      </main>
+      </p>
     );
   }
 
   const active = recap ?? detail;
 
   return (
-    <main className="min-h-screen bg-bg-base px-6 py-10 text-text-primary">
+    <div>
       <div className="mx-auto max-w-5xl">
         <div className="flex flex-wrap items-center justify-between gap-4">
           <div>
@@ -179,7 +179,7 @@ export default function MarketRecapPage() {
         )}
         {!loading && !active && (
           <Card className="mt-6 text-center text-text-muted">
-            Klik "Buat Recap Hari Ini" untuk ringkasan pasar terbaru
+            Klik &quot;Buat Recap Hari Ini&quot; untuk ringkasan pasar terbaru
           </Card>
         )}
 
@@ -210,6 +210,6 @@ export default function MarketRecapPage() {
           ⚖️ Disclaimer: alat analisis edukatif, bukan rekomendasi investasi.
         </p>
       </div>
-    </main>
+    </div>
   );
 }

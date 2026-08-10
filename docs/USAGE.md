@@ -192,6 +192,18 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 - Session disimpan di tabel `sessions` (hash SHA-256 refresh token)
 - Saat refresh → session lama di-revoke, session baru dibuat (rotasi)
 
+### 5.4 Verifikasi Email & Reset Password (W21-22 follow-up)
+
+| Halaman | Alur |
+|---|---|
+| `/verify-email?token=…` | Token dari email → `POST /auth/verify-email` → `emailVerifiedAt` terisi |
+| `/forgot-password` | Input email → `POST /auth/forgot-password` → email reset terkirim |
+| `/reset-password?token=…` | Password baru → `POST /auth/reset-password` → semua session di-revoke |
+
+- Register otomatis mengirim email verifikasi (fire-and-forget — kegagalan email tidak menggagalkan register).
+- Token: acak 32-byte, tersimpan **hash SHA-256** di tabel `email_verifications` / `password_resets`, berlaku **24 jam**.
+- Email dikirim via **Resend** (EmailService). ⚠️ Akun Resend *free/testing* hanya bisa kirim ke email pemilik (`andiagylrachman@gmail.com`) & butuh domain terverifikasi untuk penerima lain — di produksi (domain terverifikasi) email jalan ke semua user.
+
 ---
 
 ## 6. Daftar Endpoint API
@@ -208,6 +220,10 @@ curl -X POST http://localhost:3001/api/v1/auth/logout \
 | POST | `/auth/refresh` | — | Rotasi refresh token |
 | POST | `/auth/logout` | — | Revoke session |
 | GET | `/auth/me` | 🔒 | Data user saat ini |
+| POST | `/auth/verify-email` | — | **Verifikasi email** via token (dari email) |
+| POST | `/auth/resend-verification` | — | **Kirim ulang** email verifikasi |
+| POST | `/auth/forgot-password` | — | **Lupa password** → kirim email reset |
+| POST | `/auth/reset-password` | — | **Set password baru** via token |
 | GET | `/users/profile` | 🔒 | Profil lengkap user |
 | PUT | `/users/profile` | 🔒 | Update profil (name/fullName) |
 | GET | `/stocks` | — | Daftar saham IDX likuid (28 saham) |
@@ -331,6 +347,8 @@ Semua respons dibungkus **format standar** (blueprint BAGIAN 8) oleh interceptor
 **Tema visual:** "Cosmic AI Command Center" (BAGIAN 5 blueprint) — deep space × AI × holographic.
 
 > 🎨 **v2.1 — Signature Look (2026-08-10):** landing & dashboard di-redesign meniru mockup developer-platform (referensi user): navbar glass sticky + hero + baris statistik (`99.99% Uptime · 20+ Models · 10K+ Developers · 1B+ API Requests`), 4 pilar fitur (NeonCard), demo AI response, CTA + footer. Dashboard kini developer-style: **sidebar** (Overview → Docs) + **stat cards data nyata** dari API (`/credits/balance`, `/api-keys`, `/analysis/history`, `/watchlists`) + **Usage Overview chart** 7 hari + **Recent Activity**.
+> **v2.2 (2026-08-10):** sidebar dipindah ke **shared layout** `apps/web/src/app/(dashboard)/layout.tsx` → **SEMUA halaman** di /dashboard-group (Analisis, Screener, Market, Watchlist, Compare, RAG, Recap, API Keys, Billing, Docs) kini memakai sidebar + header konsisten otomatis. Halaman auth baru: `/forgot-password`, `/reset-password`, `/verify-email` (gaya cosmic sama).
+> **Admin panel:** dark theme AntD (ConfigProvider darkAlgorithm, primary violet `#7c3aed`) + halaman baru **Plans** (CRUD paket subscription via `/admin/plans`).
 > Warna inti tetap: navy `#070b18` + neon ungu `#7c3aed` + biru `#2563eb` + cyan `#22d3ee` — senada dengan mockup (`#0f1020` / `#7c44e7` / `#517cd0`).
 
 ### Komponen UI dasar (`apps/web/src/components/ui/`)

@@ -27,14 +27,14 @@ export default function DocsPage() {
 
   if (!isHydrated || !user) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-bg-base text-text-muted">
+      <p className="py-16 text-center text-text-muted">
         Memuat...
-      </main>
+      </p>
     );
   }
 
   return (
-    <main className="min-h-screen bg-bg-base px-6 py-10 text-text-primary">
+    <div>
       <div className="mx-auto max-w-5xl">
         <h1 className="font-display text-3xl font-bold">Developer Docs</h1>
         <p className="mt-1 text-text-muted">
@@ -127,6 +127,6 @@ curl -X POST https://api.4igeneration.com/v1/public/analysis/screener \\
           ⚖️ Disclaimer: data &amp; analisis bersifat edukatif — bukan rekomendasi investasi.
         </p>
       </div>
-    </main>
+    </div>
   );
 }

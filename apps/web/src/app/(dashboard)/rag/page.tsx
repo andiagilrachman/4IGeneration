@@ -122,14 +122,14 @@ export default function RagPage() {
 
   if (!isHydrated || !user) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-bg-base text-text-muted">
+      <p className="py-16 text-center text-text-muted">
         Memuat...
-      </main>
+      </p>
     );
   }
 
   return (
-    <main className="min-h-screen bg-bg-base px-6 py-10 text-text-primary">
+    <div>
       <div className="mx-auto max-w-5xl">
         <h1 className="font-display text-3xl font-bold">Q&amp;A Laporan Keuangan</h1>
         <p className="mt-1 text-text-muted">
@@ -199,8 +199,8 @@ export default function RagPage() {
           <div className="flex-1 space-y-3 overflow-auto py-4" style={{ maxHeight: 420 }}>
             {chat.length === 0 && (
               <p className="pt-10 text-center text-sm text-text-muted">
-                Contoh pertanyaan: "Berapa laba bersih perusahaan ini?" · "Apa rasio ROE-nya?" ·
-                "Berapa dividen per saham?"
+                Contoh pertanyaan: &quot;Berapa laba bersih perusahaan ini?&quot; · &quot;Apa rasio ROE-nya?&quot; ·
+                &quot;Berapa dividen per saham?&quot;
               </p>
             )}
             {chat.map((m, i) => (
@@ -242,6 +242,6 @@ export default function RagPage() {
           bukan rekomendasi investasi.
         </p>
       </div>
-    </main>
+    </div>
   );
 }

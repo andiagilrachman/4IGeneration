@@ -84,7 +84,11 @@ export default function RegisterPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-text-muted">
+        <p className="mt-4 rounded-lg border border-white/10 bg-bg-elevated/60 px-4 py-2.5 text-xs text-text-muted">
+          ✉️ Kami kirim email verifikasi setelah mendaftar — cek kotak masuk (termasuk spam).
+        </p>
+
+        <p className="mt-4 text-center text-sm text-text-muted">
           Sudah punya akun?{" "}
           <Link href="/login" className="text-highlight hover:underline">
             Masuk

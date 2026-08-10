@@ -66,7 +66,7 @@ export default function MarketPage() {
   );
 
   return (
-    <main className="min-h-screen bg-bg-base px-6 py-10 text-text-primary">
+    <div>
       <div className="mx-auto max-w-6xl">
         <h1 className="font-display text-3xl font-bold">Market</h1>
         <p className="mt-1 text-text-muted">
@@ -170,6 +170,6 @@ export default function MarketPage() {
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

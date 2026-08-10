@@ -66,6 +66,11 @@ export default function LoginPage() {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="••••••••"
           />
+          <div className="flex justify-end">
+            <Link href="/forgot-password" className="text-xs text-text-muted hover:text-highlight hover:underline">
+              Lupa password?
+            </Link>
+          </div>
           <Button type="submit" disabled={loading} className="w-full" size="lg">
             {loading ? "Memproses..." : "Masuk"}
           </Button>
@@ -75,6 +80,10 @@ export default function LoginPage() {
           Belum punya akun?{" "}
           <Link href="/register" className="text-highlight hover:underline">
             Daftar
+          </Link>{" "}
+          ·{" "}
+          <Link href="/verify-email" className="text-highlight hover:underline">
+            Verifikasi email
           </Link>
         </p>
       </Card>
