@@ -67,9 +67,13 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
     HuggingFace/OPUS) — resep lengkap di `apps/ai-training/references/wicara-llm/REFERENSI.md`
     (OpenSubtitles 40% · FineWeb-2 20% · Wikipedia 15% · Aya 12% · Cendol 12% · TED 1%)
 - [ ] **1b. Dataset Pemahaman** (±50–100K Q&A): definisi PE/PBV/ROE/DER, cara baca laporan keuangan, penjelasan sektor IDX — template dari referensi + **ditulis manual**
-- [ ] **1c. Dataset Penilaian** (±20–50K): valuasi per saham dari data fundamental (angka real, label murah/wajar/premium vs sektor) — **template deterministik dari angka real** (✅ sudah jalan)
+  - ✅ 33 contoh deterministik (25 konsep edukasi + Q&A umum) — lihat `CONCEPTS` di `build_sft_dataset.py`
+  - ⏳ Perbanyak: isi `data/manual/qa-template.csv` (24 pertanyaan, kolom output kosong) → `build_manual_qa.py`
+- [ ] **1c. Dataset Penilaian** (±20–50K): valuasi per saham dari data fundamental (angka real, label murah/wajar/premium vs sektor) — **template deterministik dari angka real**
+  - ✅ **91 contoh** (3 variasi per saham: valuasi lengkap, murah/wajar/mahal, banding vs sektor) + perbandingan termurah per sektor
 - [ ] **1d. Dataset Rekomendasi** (±10–30K): format jawaban data → analisis → risiko → kesimpulan edukatif → disclaimer — template dari data real + pedoman format manual
-- [ ] **1e. Validasi**: `validate_dataset.py` PASS + sampling manual 10%
+  - ✅ **63 contoh** (analisis lengkap + ringkasan 3 poin + ROE tertinggi per sektor)
+- [ ] **1e. Validasi**: `validate_dataset.py` PASS ✅ (187 contoh, 0 duplikat, disclaimer 100%) + sampling manual 10%
 
 **Cara cek**:
 ```bash
@@ -77,9 +81,12 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
 ```
 
 ### TAHAP 2 — TOKENIZER & PRETRAIN
-- [ ] Latih tokenizer SentencePiece/BBPE (vocab 32K) di atas corpus Tahap 1a
-- [ ] Pretrain **300M** (12 layer, 12 head, hidden 768) — 2–5 miliar token, RTX 4090 sewa ±3–6 hari
-- [ ] Uji: generate teks acak — cek bahasa Indonesia masuk akal
+- [x] **2a. Tokenizer BPE** — ✅ **terlatih**: vocab 16.384, special tokens, rasio kompresi 5,02 char/token (data uji 5%), roundtrip valid
+  - `stage2_tokenizer/train_tokenizer.py` → `data/tokenizer/4ig-bpe-16k.json` (+ `.meta.json`)
+  - Ulangi nanti dengan corpus 1,3B token (vocab bisa naik ke 32K)
+- [ ] **2b. Packing token** → `train.bin` / `val.bin` (uint16 + token `<|eos|>` antar dokumen, pola WicaraLLM `pack_tokens.py`)
+- [ ] **2c. Pretrain 300M** (12 layer, 12 head, hidden 768) — 2–5 miliar token, RTX 4090 sewa ±3–6 hari
+- [ ] **2d. Uji**: generate teks acak — cek bahasa Indonesia masuk akal
 - [ ] (Opsional, setelah 300M lulus) Pretrain **1.1B** — ±2–3 minggu
 
 **Cara cek**: grafik loss turun + sampel output per checkpoint.
