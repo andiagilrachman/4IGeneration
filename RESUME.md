@@ -65,7 +65,7 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 | 2b. Packing token | train.bin (1,75M token) + val.bin (92K), EOS, split dokumen | ✅ |
 | 2c. Skrip pretrain | Arsitektur WicaraLLM (RMSNorm/RoPE/GQA/SwiGLU) + smoke test LULUS (val 8,50) | ✅ siap GPU |
 | 2c'. Pipeline 1-perintah | `pipeline.py` + `download_full_corpus.py` (6 sumber) + panduan RunPod | ✅ |
-| 2d. Pretrain 300M sungguhan | — | ⏳ **butuh GPU sewa** |
+| 2d. Pretrain 300M sungguhan | — | ⏳ **butuh GPU sewa** (data 19,8M token sudah siap di PC — 1 epoch di RunPod < $1) |
 | **3 — SFT** | Fine-tune instruksi 3 kemampuan (QLoRA) | ⏳ Belum |
 | **4 — DPO & Evaluasi** | Alignment + bank soal 200 pertanyaan | ⏳ Belum |
 | **5 — Deploy** | GGUF Q4 → Ollama → gateway 4IG (provider "4IG-Finance") | ⏳ Belum |
@@ -132,6 +132,7 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 ## 📓 Log Pekerjaan Otomatis (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | PC Windows: pipeline LLM JALAN PENUH — corpus 6 sumber + build + tokenizer BPE + pack → train.bin 18.912.727 token + val.bin 933.483 (19,8 juta token, 11x sandbox) di C:\4Igeneration\apps\ai-training | ✅ Selesai | Tahap 1-2 di PC |
 | 2026-08-22 | PC Windows: Python 3.12.10 terpasang (winget, berdampingan 3.14) → AI Service :8000 AKTIF via start-ai-service.bat — stack 4 app lengkap jalan di C:\4Igeneration | ✅ Selesai | PC setup |
 | 2026-08-22 | feat: Tahap 3 SFT — prepare_sft.py (chat template + masking -100, 187 contoh → 169/18) + train_sft.py (smoke LULUS CPU val 8,34) + bank soal 15 pertanyaan & evaluate.py (starter Tahap 4) + start-ai-service.bat & tes-llm.bat untuk PC | ✅ Selesai | Tahap 3a-3b + 4a |
 | 2026-08-22 | fix: start-all.bat pakai npm run dev (API tidak punya start:dev) + ai-service pakai .venv kalau ada; tambah alias start:dev di package.json | ✅ Selesai | auto |
