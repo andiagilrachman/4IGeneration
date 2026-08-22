@@ -84,7 +84,7 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
 - [x] **2a. Tokenizer BPE** — ✅ **terlatih**: vocab 16.384, special tokens, rasio kompresi 5,02 char/token (data uji 5%), roundtrip valid
   - `stage2_tokenizer/train_tokenizer.py` → `data/tokenizer/4ig-bpe-16k.json` (+ `.meta.json`)
   - Ulangi nanti dengan corpus 1,3B token (vocab bisa naik ke 32K)
-- [ ] **2b. Packing token** → `train.bin` / `val.bin` (uint16 + token `<|eos|>` antar dokumen, pola WicaraLLM `pack_tokens.py`)
+- [x] **2b. Packing token** — ✅ **selesai**: `stage2_tokenizer/pack_tokens.py` → `data/tokens/train.bin` (1,75M token) + `val.bin` (92K token), pisah di level dokumen (5%), EOS antar dokumen, decode-verify valid
 - [ ] **2c. Pretrain 300M** (12 layer, 12 head, hidden 768) — 2–5 miliar token, RTX 4090 sewa ±3–6 hari
 - [ ] **2d. Uji**: generate teks acak — cek bahasa Indonesia masuk akal
 - [ ] (Opsional, setelah 300M lulus) Pretrain **1.1B** — ±2–3 minggu
