@@ -14,6 +14,18 @@ Yang dipakai **hanya**:
 - Teks buatan manusia (Wikipedia ID, laporan tahunan, artikel, buku)
 - Q&A ditulis manual
 
+## ⚡ Pipeline Satu Perintah
+
+Semua tahap (corpus → tokenizer → packing → pretrain) bisa dijalankan sekali jalan:
+
+```bash
+python pipeline.py              # semua langkah, device otomatis (cuda kalau ada)
+python pipeline.py --quick      # versi kecil untuk uji coba (< 5 menit)
+python pipeline.py --steps corpus,build,tokenizer,pack   # siapkan data saja
+```
+
+Panduan GPU sewa (RunPod): [`docs/RUNPOD-PRETRAIN.md`](../../docs/RUNPOD-PRETRAIN.md)
+
 ## Struktur
 
 ```

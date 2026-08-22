@@ -120,8 +120,11 @@ def main() -> int:
     ap.add_argument("--sample-interval", type=int, default=500)
     ap.add_argument("--lr", type=float, default=None)
     ap.add_argument("--seed", type=int, default=1337)
-    ap.add_argument("--device", default="cuda" if torch.cuda.is_available() else "cpu")
+    ap.add_argument("--device", default="auto")
     args = ap.parse_args()
+
+    if args.device == "auto":
+        args.device = "cuda" if torch.cuda.is_available() else "cpu"
 
     torch.manual_seed(args.seed)
     np.random.seed(args.seed)
@@ -135,6 +138,19 @@ def main() -> int:
           f"(kv {cfg.n_kv_head}) · ffn={cfg.ffn_hidden} · seq={cfg.max_seq_len}")
     print(f"  Data      : {args.train_bin} + {args.val_bin}")
     print(f"  Device    : {args.device}")
+
+    # Tokenizer dimuat dulu — vocab_size mengikuti tokenizer (dipaksa konsisten).
+    try:
+        from tokenizers import Tokenizer
+
+        tok = Tokenizer.from_file(args.tokenizer)
+        tok_vocab = tok.get_vocab_size()
+        if cfg.vocab_size != tok_vocab:
+            print(f"  ↻ vocab config {cfg.vocab_size} → {tok_vocab} (ikut tokenizer)")
+            cfg.vocab_size = tok_vocab
+    except Exception:  # noqa: BLE001
+        tok = None
+        print("  ⚠ tokenizer tidak ditemukan — sampling nonaktif")
 
     train_ds = TokenDataset(Path(args.train_bin), cfg.max_seq_len)
     val_ds = TokenDataset(Path(args.val_bin), cfg.max_seq_len)
@@ -165,14 +181,6 @@ def main() -> int:
 
     use_amp = args.device == "cuda"
     scaler = torch.cuda.amp.GradScaler(enabled=use_amp)
-
-    # tokenizer untuk sampling
-    try:
-        from tokenizers import Tokenizer
-
-        tok = Tokenizer.from_file(args.tokenizer)
-    except Exception:  # noqa: BLE001
-        tok = None
 
     t0 = time.time()
     loss_accum = 0.0

@@ -91,6 +91,8 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
   val loss 9,21→8,60 (baseline ln(vocab)=9,70) ✅
 - [ ] **2c'. Pretrain 300M** (config `model-300m.json`, ±12 layer hidden 768) —
   GPU 24GB sewa: `python stage2_pretrain/train.py --config configs/model-300m.json --device cuda`
+- [x] **2c'. Satu-perintah + panduan GPU** — `pipeline.py` (corpus→tokenizer→pack→train, `--quick` untuk uji)
+  + `docs/RUNPOD-PRETRAIN.md` (langkah RunPod, resume, troubleshooting, estimasi biaya)
 - [ ] **2d. Uji**: generate teks acak — cek bahasa Indonesia masuk akal
 - [ ] (Opsional, setelah 300M lulus) Pretrain **1.1B** — ±2–3 minggu
 

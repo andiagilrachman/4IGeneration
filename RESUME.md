@@ -75,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | feat: pipeline satu-perintah `pipeline.py` (corpus→tokenizer→pack→train, --quick) + downloader 6 sumber corpus manusia (`download_full_corpus.py`, resep WicaraLLM) + panduan `docs/RUNPOD-PRETRAIN.md` (RunPod RTX 4090, resume, biaya) + fix vocab ikut tokenizer; uji end-to-end: tokenizer 16K → pack → train smoke (val 8,50) | ✅ Selesai | Tahap 2c' |
 | 2026-08-22 | feat: Tahap 2c — skrip pretrain + smoke test LULUS: adaptasi arsitektur WicaraLLM (RMSNorm/RoPE/GQA/SwiGLU) ke stage2_pretrain/, train.py dengan AdamW+cosine warmup+eval+sampling+checkpoint; smoke 2,9M param CPU 20 steps val loss 9,21→8,60 | ✅ Selesai | Tahap 2c (siap GPU) |
 | 2026-08-22 | feat: Tahap 2b — packing token: `pack_tokens.py` ubah corpus → train.bin (1.746.518 token) + val.bin (92.209), pisah level dokumen 5%, EOS antar dokumen, decode-verify lulus | ✅ Selesai | Tahap 2b |
 | 2026-08-22 | feat: Tahap 2a + perluasan dataset — tokenizer BPE 16K terlatih (rasio kompresi 5,02 char/token, roundtrip valid, `stage2_tokenizer/train_tokenizer.py`); dataset SFT 69→187 contoh (pemahaman 33, penilaian 91, rekomendasi 63) + perbandingan sektor, validator PASS 0 duplikat disclaimer 100% | ✅ Selesai | Tahap 1b-d + 2a |
