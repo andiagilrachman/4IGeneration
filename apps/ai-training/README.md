@@ -49,7 +49,13 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
 
 # 3) Corpus pretraining dari folder teks
 python3 stage1_data/build_pretrain_corpus.py --input-dir ./data/raw_corpus --out data/pretrain/
+
+# 4) Konversi dataset CSV teks manusia (IndonLU dll) → corpus
+python3 stage1_data/convert_csv_corpus.py --input-dir ./data/raw_indonlu --out data/pretrain_raw/indonlu.txt
+
+# 5) (Di mesin sendiri — HF/OPUS) unduh corpus publik manusia
+python3 stage1_data/download_corpus_hf.py --dataset wikipedia --config 20220301.id --max-docs 50000 --out data/pretrain_raw/wiki-id.txt
 ```
 
-> Dataset produksi (50–100K contoh) dibuat dengan memperluas data fundamental
-> historis + penulisan Q&A manual (DILARANG pakai output LLM lain — lihat Prinsip Data).
+> Referensi implementasi Tahap 2–4: `references/wicara-llm/` (WicaraLLM, Apache-2.0 —
+> SLM Indonesia 56M dari nol di GPU 6GB, korpus 1,3B token). Lihat `references/wicara-llm/REFERENSI.md`.

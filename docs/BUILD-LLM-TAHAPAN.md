@@ -59,8 +59,13 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
 ### TAHAP 1 — DATA (80% pekerjaan) 🚧
 - [ ] **1a. Corpus pretraining** (belajar bahasa + istilah saham) — **HANYA teks manusia**:
   - `build_pretrain_corpus.py` — input: file .txt/.md/.csv apa pun (laporan tahunan IDX, artikel edukasi, berita pasar)
-  - Opsional: corpus publik ID via HuggingFace `datasets` (Wikipedia ID, OSCAR-id, IndoNews — semua teks manusia)
-  - Target: 0.5–2 GB teks bersih
+  - `download_corpus_hf.py` — corpus publik ID via HuggingFace (Wikipedia ID, OSCAR-id — teks manusia)
+  - `convert_csv_corpus.py` — konversi dataset CSV teks manusia (mis. IndonLU) → kalimat
+  - ✅ **Starter corpus terbukti jalan**: 74.913 kalimat unik, ±2,2 juta token (8,5 MB) dari
+    `id-news.txt` (berita Otosia) + dataset IndonLU (review/tweet/QA) — lihat `data/pretrain/manifest.json`
+  - ⏳ **Scaling ke 1,3 miliar token**: jalankan di mesin sendiri (sandbox ini memblokir
+    HuggingFace/OPUS) — resep lengkap di `apps/ai-training/references/wicara-llm/REFERENSI.md`
+    (OpenSubtitles 40% · FineWeb-2 20% · Wikipedia 15% · Aya 12% · Cendol 12% · TED 1%)
 - [ ] **1b. Dataset Pemahaman** (±50–100K Q&A): definisi PE/PBV/ROE/DER, cara baca laporan keuangan, penjelasan sektor IDX — template dari referensi + **ditulis manual**
 - [ ] **1c. Dataset Penilaian** (±20–50K): valuasi per saham dari data fundamental (angka real, label murah/wajar/premium vs sektor) — **template deterministik dari angka real** (✅ sudah jalan)
 - [ ] **1d. Dataset Rekomendasi** (±10–30K): format jawaban data → analisis → risiko → kesimpulan edukatif → disclaimer — template dari data real + pedoman format manual

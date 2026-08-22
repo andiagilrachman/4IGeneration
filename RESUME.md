@@ -75,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | feat: Tahap 1a jalan — korpus pretraining teks manusia: converter CSV IndonLU (review/tweet/QA) + corpus berita id-news.txt → 74.913 kalimat unik (±2,2 juta token, 8,5MB) via build_pretrain_corpus.py; downloader corpus HF disiapkan (diblokir di sandbox, jalan di mesin sendiri); referensi WicaraLLM (Apache-2.0, SLM ID 56M dari nol, resep korpus 1,3B token) disalin ke apps/ai-training/references/ | ✅ Selesai | Tahap 1 — Data (1a) |
 | 2026-08-22 | feat: mulai bangun LLM sendiri 4IG-Finance (dari nol) — Tahap 0-1: scaffold `apps/ai-training/` (configs 300M/1.1B, builder corpus pretraining, builder dataset SFT 3 kemampuan pemahaman/penilaian/rekomendasi, validator) + peta tahapan `docs/BUILD-LLM-TAHAPAN.md`; pipeline data teruji (69 contoh PASS, disclaimer 100%) | ✅ Selesai | Tahap 1 — Data |
 | 2026-08-10 | docs: sesuaikan panduan & script Windows pakai user root XAMPP default (tanpa password) + opsi pilih DB di setup.bat | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | docs: panduan install Windows + setup.bat + start-all.bat — jalankan project di komputer sendiri dengan XAMPP | ✅ Selesai | auto (post-commit hook) |
