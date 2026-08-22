@@ -5,6 +5,7 @@
   "description": "4IGeneration — NestJS Backend API",
   "scripts": {
     "dev": "nest start --watch",
+    "start:dev": "nest start --watch",
     "build": "nest build",
     "start": "nest start",
     "start:prod": "node dist/main.js",
