@@ -24,6 +24,15 @@ if errorlevel 1 (
     exit /b 1
 )
 
+REM --- 0b) Pastikan branch kerja benar (LLM ada di arena/01a02969-4igeneration) ---
+for /f "delims=" %%i in ('git rev-parse --abbrev-ref HEAD 2^>nul') do set "CURBRANCH=%%i"
+if not "%CURBRANCH%"=="%BRANCH%" (
+    echo [0/5] Repo di branch "%CURBRANCH%" - pindah ke %BRANCH% ...
+    git fetch origin --prune
+    git checkout %BRANCH% 2>nul
+    if errorlevel 1 git checkout -b %BRANCH% origin/%BRANCH%
+)
+
 REM --- 1) Clone atau Pull ---
 if exist "%TARGET%\.git" (
     echo [1/5] Repo sudah ada - menarik update terbaru...

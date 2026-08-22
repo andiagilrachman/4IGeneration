@@ -24,12 +24,21 @@ python --version
 
 Buka CMD, lalu:
 ```bat
-git clone https://github.com/andiagilrachman/4IGeneration.git C:\4Igeneration
+git clone -b arena/01a02969-4igeneration https://github.com/andiagilrachman/4IGeneration.git C:\4Igeneration
 cd C:\4Igeneration
 sync-pc.bat
 ```
 Script akan: checkout branch kerja → buat `.venv` → install dependensi →
 menawarkan menjalankan pipeline.
+
+> ⚠️ **Sudah terlanjur clone tanpa `-b`?** (kamu di branch `main` sehingga
+> `sync-pc.bat` tidak ada) — cukup jalankan ini di folder yang sudah ada:
+> ```bat
+> cd C:\4Igeneration
+> git fetch origin
+> git checkout arena/01a02969-4igeneration
+> sync-pc.bat
+> ```
 
 ## Cara 2 — Sudah pernah clone sebelumnya
 
