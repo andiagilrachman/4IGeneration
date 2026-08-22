@@ -99,16 +99,20 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
 **Cara cek**: grafik loss turun + sampel output per checkpoint.
 
 ### TAHAP 3 — SFT (ajari cara menjawab)
-- [ ] Format dataset SFT → Alpaca/ShareGPT
-- [ ] QLoRA di atas pretrain 300M/1.1B (peft, r=64)
-- [ ] Evaluasi bank soal 200 pertanyaan (jawaban pasti vs model)
+- [x] **3a. Persiapan data SFT** — `stage3_sft/prepare_sft.py`: chat template (`<|system|>/<|user|>/<|assistant|>`),
+  masking -100 (loss hanya di jawaban), split train/val. Teruji: 187 contoh → 169 train / 18 val (18.906 token jawaban)
+- [x] **3b. Skrip SFT + smoke test LULUS** — `stage3_sft/train_sft.py`: muat pretrain, fine-tune masked loss,
+  eval, sampling, checkpoint. Smoke CPU 20 step: loss 8,72→8,28, val 8,34 ✅ (siap GPU)
+- [ ] **3c. SFT sungguhan** — setelah pretrain 300M: `python stage3_sft/train_sft.py --checkpoint checkpoints/run1/best.pt --config configs/model-300m.json --epochs 3 --device cuda`
+- [ ] **3d. Evaluasi bank soal** — `stage4_dpo/evaluate.py` (15 soal starter, skor keyword + disclaimer) ≥ 70%
 
 **Cara cek**: skor akurasi bank soal ≥ 70% jawaban masuk akal.
 
 ### TAHAP 4 — DPO & EVALUASI
-- [ ] Dataset preferensi: jawaban baik (dengan disclaimer, tanpa jaminan) vs buruk
-- [ ] DPO training (1–2 epoch)
-- [ ] Uji halusinasi angka: model harus bilang "tidak tahu" saat data tidak diberikan
+- [ ] **4a. Starter evaluasi** — ✅ `stage4_dpo/bank_soal.jsonl` (15 soal manusia) + `stage4_dpo/evaluate.py` (skor keyword + disclaimer)
+- [ ] **4b. Dataset preferensi**: jawaban baik (dengan disclaimer, tanpa jaminan) vs buruk — ditulis manual
+- [ ] **4c. DPO training** (1–2 epoch)
+- [ ] **4d. Uji halusinasi angka**: model harus bilang "tidak tahu" saat data tidak diberikan
 
 **Cara cek**: 20 pertanyaan jebakan → 0 jawaban "jaminan untung".
 

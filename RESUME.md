@@ -132,6 +132,7 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 ## 📓 Log Pekerjaan Otomatis (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | feat: Tahap 3 SFT — prepare_sft.py (chat template + masking -100, 187 contoh → 169/18) + train_sft.py (smoke LULUS CPU val 8,34) + bank soal 15 pertanyaan & evaluate.py (starter Tahap 4) + start-ai-service.bat & tes-llm.bat untuk PC | ✅ Selesai | Tahap 3a-3b + 4a |
 | 2026-08-22 | fix: start-all.bat pakai npm run dev (API tidak punya start:dev) + ai-service pakai .venv kalau ada; tambah alias start:dev di package.json | ✅ Selesai | auto |
 | 2026-08-22 | feat: sync-pc.bat + docs/SYNC-PC.md — sinkron satu-klik ke C:\4Igeneration (clone/pull + venv + pipeline) + auto-pindah branch arena | ✅ Selesai | auto |
 | 2026-08-22 | feat: pipeline satu-perintah pipeline.py + downloader corpus 6 sumber + panduan RunPod (siap pretrain GPU) | ✅ Selesai | auto |
