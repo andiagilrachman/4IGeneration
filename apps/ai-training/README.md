@@ -25,6 +25,7 @@ python pipeline.py --steps corpus,build,tokenizer,pack   # siapkan data saja
 ```
 
 Panduan GPU sewa (RunPod): [`docs/RUNPOD-PRETRAIN.md`](../../docs/RUNPOD-PRETRAIN.md)
+Sinkron ke PC Windows (C:\4Igeneration): [`sync-pc.bat`](../../sync-pc.bat) + [`docs/SYNC-PC.md`](../../docs/SYNC-PC.md)
 
 ## Struktur
 
