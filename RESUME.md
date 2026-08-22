@@ -15,7 +15,7 @@
 | 🏁 Fokus aktif | **Dua jalur**: (A) Stabilisasi web di lokal/PC Windows · (B) **Membangun LLM sendiri 4IG-Finance dari nol** |
 | 🗂 Repositori git | Branch utama `main` + branch kerja **`arena/01a02969-4igeneration`** (semua pekerjaan LLM & fix ada di sini) |
 | ☁️ Remote (GitHub) | ✅ Terhubung & ter-push → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) |
-| 🖥️ PC Windows | ✅ Ter-clone di `C:\4Igeneration` (via `sync-pc.bat`), web stack JALAN: Web :3000 · API :3001 · Admin :3002 · MySQL XAMPP |
+| 🖥️ PC Windows | ✅ Ter-clone di `C:\4Igeneration` (via `sync-pc.bat`), **STACK LENGKAP JALAN**: Web :3000 · API :3001 · Admin :3002 · **AI Service :8000** · MySQL XAMPP · Python 3.12 (dipasang berdampingan 3.14) |
 | 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
 | 📓 Sistem resume otomatis | ✅ `scripts/resume.sh` + post-commit hook |
 
@@ -106,8 +106,8 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 | **Tahap 3 — SFT** | 🟡 Sedang | Skrip fine-tune instruksi (peft/QLoRA) |
 | **Tahap 4 — DPO & bank soal** | 🟡 Sedang | Alignment + evaluasi 200 pertanyaan |
 | **Tahap 5 — Deploy ke gateway** | 🟡 Sedang | GGUF → Ollama → provider "4IG-Finance" |
-| AI Service di PC (port 8000) | 🟡 Sedang | Butuh Python 3.11/3.12 (3.14 belum didukung dependensi) — tanpa ini fitur AI web pakai data demo |
-| API key AI (Gemini/Groq) di `apps/ai-service/.env` | 🟡 Sedang | Supaya AI gateway terhubung provider nyata |
+| AI Service di PC (port 8000) | ✅ **AKTIF** | Python 3.12.10 terpasang via winget (3.14 tidak didukung dependensi) → `start-ai-service.bat` jalan |
+| API key AI (Gemini/Groq) di `apps/ai-service/.env` | 🟡 Sedang | Supaya AI gateway terhubung provider nyata (tanpa key: screener tetap jalan pakai data demo fallback) |
 | CI/CD aktif | 🟢 Rendah | `.github/workflows-disabled/` — butuh token workflow scope |
 | Verifikasi endpoint `/stocks/:code/chart` (v11) | 🟢 Rendah | Ada di backup zip, belum di source tree |
 | Merge branch `arena` → `main` | 🟢 Rendah | Setelah pekerjaan LLM stabil |
@@ -132,6 +132,7 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 ## 📓 Log Pekerjaan Otomatis (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | PC Windows: Python 3.12.10 terpasang (winget, berdampingan 3.14) → AI Service :8000 AKTIF via start-ai-service.bat — stack 4 app lengkap jalan di C:\4Igeneration | ✅ Selesai | PC setup |
 | 2026-08-22 | feat: Tahap 3 SFT — prepare_sft.py (chat template + masking -100, 187 contoh → 169/18) + train_sft.py (smoke LULUS CPU val 8,34) + bank soal 15 pertanyaan & evaluate.py (starter Tahap 4) + start-ai-service.bat & tes-llm.bat untuk PC | ✅ Selesai | Tahap 3a-3b + 4a |
 | 2026-08-22 | fix: start-all.bat pakai npm run dev (API tidak punya start:dev) + ai-service pakai .venv kalau ada; tambah alias start:dev di package.json | ✅ Selesai | auto |
 | 2026-08-22 | feat: sync-pc.bat + docs/SYNC-PC.md — sinkron satu-klik ke C:\4Igeneration (clone/pull + venv + pipeline) + auto-pindah branch arena | ✅ Selesai | auto |
