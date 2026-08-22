@@ -1,0 +1,16 @@
+{
+  "name": "4ig-100m-pc",
+  "target": "uji coba di PC (CPU) — model 100M, bisa jalan semalaman",
+  "d_model": 512,
+  "n_layers": 8,
+  "n_heads": 8,
+  "n_kv_heads": 4,
+  "ffn_hidden": 1408,
+  "max_seq_len": 512,
+  "vocab_size": 16384,
+  "learning_rate": 3e-4,
+  "weight_decay": 0.1,
+  "warmup_ratio": 0.01,
+  "batch_tokens": 262144,
+  "notes": "VRAM: ~6-8GB kalau di GPU kecil; di CPU lambat tapi jalan. Untuk PC tanpa GPU: steps dibatasi manual (mis. --steps 2000)."
+}
