@@ -85,7 +85,12 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
   - `stage2_tokenizer/train_tokenizer.py` → `data/tokenizer/4ig-bpe-16k.json` (+ `.meta.json`)
   - Ulangi nanti dengan corpus 1,3B token (vocab bisa naik ke 32K)
 - [x] **2b. Packing token** — ✅ **selesai**: `stage2_tokenizer/pack_tokens.py` → `data/tokens/train.bin` (1,75M token) + `val.bin` (92K token), pisah di level dokumen (5%), EOS antar dokumen, decode-verify valid
-- [ ] **2c. Pretrain 300M** (12 layer, 12 head, hidden 768) — 2–5 miliar token, RTX 4090 sewa ±3–6 hari
+- [x] **2c. Skrip pretrain siap + smoke test LULUS** — `stage2_pretrain/train.py` + modul model
+  (adaptasi WicaraLLM, Apache-2.0): RMSNorm/RoPE/GQA/SwiGLU, AdamW + cosine-warmup,
+  eval loss, sampling, checkpoint resume. Smoke: config 2,9M di CPU 20 steps —
+  val loss 9,21→8,60 (baseline ln(vocab)=9,70) ✅
+- [ ] **2c'. Pretrain 300M** (config `model-300m.json`, ±12 layer hidden 768) —
+  GPU 24GB sewa: `python stage2_pretrain/train.py --config configs/model-300m.json --device cuda`
 - [ ] **2d. Uji**: generate teks acak — cek bahasa Indonesia masuk akal
 - [ ] (Opsional, setelah 300M lulus) Pretrain **1.1B** — ±2–3 minggu
 

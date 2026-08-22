@@ -75,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | feat: Tahap 2c — skrip pretrain + smoke test LULUS: adaptasi arsitektur WicaraLLM (RMSNorm/RoPE/GQA/SwiGLU) ke stage2_pretrain/, train.py dengan AdamW+cosine warmup+eval+sampling+checkpoint; smoke 2,9M param CPU 20 steps val loss 9,21→8,60 | ✅ Selesai | Tahap 2c (siap GPU) |
 | 2026-08-22 | feat: Tahap 2b — packing token: `pack_tokens.py` ubah corpus → train.bin (1.746.518 token) + val.bin (92.209), pisah level dokumen 5%, EOS antar dokumen, decode-verify lulus | ✅ Selesai | Tahap 2b |
 | 2026-08-22 | feat: Tahap 2a + perluasan dataset — tokenizer BPE 16K terlatih (rasio kompresi 5,02 char/token, roundtrip valid, `stage2_tokenizer/train_tokenizer.py`); dataset SFT 69→187 contoh (pemahaman 33, penilaian 91, rekomendasi 63) + perbandingan sektor, validator PASS 0 duplikat disclaimer 100% | ✅ Selesai | Tahap 1b-d + 2a |
 | 2026-08-22 | feat: Tahap 1a jalan — korpus pretraining teks manusia: converter CSV IndonLU (review/tweet/QA) + corpus berita id-news.txt → 74.913 kalimat unik (±2,2 juta token, 8,5MB) via build_pretrain_corpus.py; downloader corpus HF disiapkan (diblokir di sandbox, jalan di mesin sendiri); referensi WicaraLLM (Apache-2.0, SLM ID 56M dari nol, resep korpus 1,3B token) disalin ke apps/ai-training/references/ | ✅ Selesai | Tahap 1 — Data (1a) |

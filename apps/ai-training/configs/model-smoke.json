@@ -1,0 +1,16 @@
+{
+  "name": "4ig-smoke",
+  "target": "smoke test — buktikan training loop jalan di CPU",
+  "d_model": 128,
+  "n_layers": 4,
+  "n_heads": 4,
+  "n_kv_heads": 2,
+  "ffn_hidden": 384,
+  "max_seq_len": 256,
+  "vocab_size": 16384,
+  "learning_rate": 1e-3,
+  "weight_decay": 0.1,
+  "warmup_ratio": 0.1,
+  "batch_tokens": 131072,
+  "notes": "Config kecil untuk uji CPU. Pretrain sungguhan pakai model-300m.json."
+}
