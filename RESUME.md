@@ -15,7 +15,7 @@
 | 🏁 Fokus aktif | **Dua jalur**: (A) Stabilisasi web di lokal/PC Windows · (B) **Membangun LLM sendiri 4IG-Finance dari nol** |
 | 🗂 Repositori git | Branch utama `main` + branch kerja **`arena/01a02969-4igeneration`** (semua pekerjaan LLM & fix ada di sini) |
 | ☁️ Remote (GitHub) | ✅ Terhubung & ter-push → [github.com/andiagilrachman/4IGeneration](https://github.com/andiagilrachman/4IGeneration) |
-| 🖥️ PC Windows | ✅ Ter-clone di `C:\4Igeneration` (via `sync-pc.bat`), **STACK LENGKAP JALAN**: Web :3000 · API :3001 · Admin :3002 · **AI Service :8000** · MySQL XAMPP · Python 3.12 (dipasang berdampingan 3.14) |
+| 🖥️ PC Windows | ✅ Ter-clone di `E:\4igeneration` (via `sync-pc.bat`), **STACK LENGKAP JALAN**: Web :3000 · API :3001 · Admin :3002 · **AI Service :8000** · MySQL XAMPP · Python 3.12 (dipasang berdampingan 3.14) |
 | 📚 Blueprint | ✅ Diarsipkan di `docs/blueprint/` (20 bagian) |
 | 📓 Sistem resume otomatis | ✅ `scripts/resume.sh` + post-commit hook |
 
@@ -78,7 +78,7 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 
 | Tanggal | Pekerjaan | Status |
 |---|---|---|
-| 2026-08-22 | **Stack web JALAN di PC Windows** (`C:\4Igeneration`): Web :3000 · API :3001 · Admin :3002 · MySQL XAMPP aktif. Fix: `start-all.bat` pakai `npm run dev` (API tidak punya `start:dev`), alias `start:dev` di package.json, ai-service pakai `.venv` bila ada | ✅ Selesai |
+| 2026-08-22 | **Stack web JALAN di PC Windows** (`E:\4igeneration`): Web :3000 · API :3001 · Admin :3002 · MySQL XAMPP aktif. Fix: `start-all.bat` pakai `npm run dev` (API tidak punya `start:dev`), alias `start:dev` di package.json, ai-service pakai `.venv` bila ada | ✅ Selesai |
 | 2026-08-22 | `sync-pc.bat` + `docs/SYNC-PC.md` — sinkron 1-klik ke PC (clone/pull + venv + pipeline), auto-pindah branch `arena` | ✅ Selesai |
 | 2026-08-22 | Pipeline 1-perintah `pipeline.py` (corpus→tokenizer→pack→train, `--quick`) + downloader 6 sumber corpus manusia + `docs/RUNPOD-PRETRAIN.md` + fix vocab ikut tokenizer; uji end-to-end lulus | ✅ Selesai |
 | 2026-08-22 | Tahap 2c — skrip pretrain (arsitektur WicaraLLM adaptasi, Apache-2.0) + smoke test LULUS di CPU (val loss 9,21→8,50) | ✅ Selesai |
@@ -117,7 +117,7 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 
 ## ⏭️ Langkah Selanjutnya (Next Actions) — Urutan Rekomendasi
 
-1. **Di PC-mu**: `cd C:\4Igeneration\apps\ai-training` → `python pipeline.py --quick` (uji pipeline, <5 menit)
+1. **Di PC-mu**: `cd E:\4igeneration\apps\ai-training` → `python pipeline.py --quick` (uji pipeline, <5 menit)
 2. **Di PC-mu**: `python pipeline.py --steps corpus,build,tokenizer,pack` (unduh corpus 1,3B token — beberapa jam; mulai `--only wikipedia,fineweb2` untuk cepat)
 3. **Isi Q&A manual** di `data/manual/qa-template.csv` (24 pertanyaan edukasi saham)
 4. **Sewa GPU RunPod** → pretrain 300M → download checkpoint (panduan `docs/RUNPOD-PRETRAIN.md`)
@@ -132,11 +132,12 @@ Tujuan: LLM khusus saham Indonesia (300M → 1.1B param, pretrain dari nol) deng
 ## 📓 Log Pekerjaan Otomatis (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | PC Windows: proyek DIPINDAH ke `E:\4igeneration` (drive 300GB) via robocopy /MOVE; sync-pc.bat & docs otomatis menunjuk E: (fallback C:); .venv dibuat ulang | ✅ Selesai | PC setup |
 | 2026-08-22 | PC Windows: corpus diperbesar — 1.499.911 baris (7,7x) → build+tokenizer+pack → train.bin 26.877.340 token + val.bin 1.353.674 (±28 juta token, 51,3 MB) — siap pretrain RunPod | ✅ Selesai | Tahap 1-2 di PC |
-| 2026-08-22 | PC Windows: Python 3.12.10 terpasang (winget, berdampingan 3.14) → AI Service :8000 AKTIF via start-ai-service.bat — stack 4 app lengkap jalan di C:\4Igeneration | ✅ Selesai | PC setup |
+| 2026-08-22 | PC Windows: Python 3.12.10 terpasang (winget, berdampingan 3.14) → AI Service :8000 AKTIF via start-ai-service.bat — stack 4 app lengkap jalan di E:\4igeneration | ✅ Selesai | PC setup |
 | 2026-08-22 | feat: Tahap 3 SFT — prepare_sft.py (chat template + masking -100, 187 contoh → 169/18) + train_sft.py (smoke LULUS CPU val 8,34) + bank soal 15 pertanyaan & evaluate.py (starter Tahap 4) + start-ai-service.bat & tes-llm.bat untuk PC | ✅ Selesai | Tahap 3a-3b + 4a |
 | 2026-08-22 | fix: start-all.bat pakai npm run dev (API tidak punya start:dev) + ai-service pakai .venv kalau ada; tambah alias start:dev di package.json | ✅ Selesai | auto |
-| 2026-08-22 | feat: sync-pc.bat + docs/SYNC-PC.md — sinkron satu-klik ke C:\4Igeneration (clone/pull + venv + pipeline) + auto-pindah branch arena | ✅ Selesai | auto |
+| 2026-08-22 | feat: sync-pc.bat + docs/SYNC-PC.md — sinkron satu-klik ke E:\4igeneration (clone/pull + venv + pipeline) + auto-pindah branch arena | ✅ Selesai | auto |
 | 2026-08-22 | feat: pipeline satu-perintah pipeline.py + downloader corpus 6 sumber + panduan RunPod (siap pretrain GPU) | ✅ Selesai | auto |
 | 2026-08-22 | feat: Tahap 2c — skrip pretrain (arsitektur WicaraLLM adaptasi) + smoke test LULUS di CPU (val loss 9,21→8,60) | ✅ Selesai | auto |
 | 2026-08-22 | feat: Tahap 2b — packing token train.bin/val.bin (1,75M token, pisah level dokumen, EOS, verify) | ✅ Selesai | auto |

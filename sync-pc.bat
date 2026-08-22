@@ -1,14 +1,15 @@
 @echo off
 chcp 65001 >nul
 REM ================================================================
-REM  SYNC 4IGeneration KE PC (Windows) - target C:\4Igeneration
+REM  SYNC 4IGeneration KE PC (Windows) - target E:\4igeneration
 REM  - Clone / pull repo dari GitHub
 REM  - Setup Python venv + dependensi (apps/ai-training)
 REM  - Opsi jalankan pipeline (unduh corpus / uji cepat)
 REM  Cara pakai: double-click file ini, atau jalankan dari cmd.
 REM ================================================================
 setlocal
-set "TARGET=C:\4Igeneration"
+set "TARGET=E:\4igeneration"
+if not exist "E:\" set "TARGET=C:\4Igeneration"
 set "BRANCH=arena/01a02969-4igeneration"
 set "REPO=https://github.com/andiagilrachman/4IGeneration.git"
 

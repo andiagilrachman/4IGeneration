@@ -1,7 +1,33 @@
-# 🔄 Sync 4IGeneration ke PC (Windows) — `C:\4Igeneration`
+# 🔄 Sync 4IGeneration ke PC (Windows) — `E:\4igeneration`
 
 Panduan singkat untuk menyiapkan proyek + pipeline LLM 4IG-Finance di komputer
 Windows kamu, dan menjaga agar selalu sinkron dengan GitHub.
+
+> 📌 **Lokasi utama proyek di PC: `E:\4igeneration`** (drive dengan ruang besar —
+> corpus training bisa puluhan GB). Kalau drive E: tidak ada, script otomatis
+> memakai `C:\4Igeneration` sebagai cadangan.
+
+---
+
+## 📦 Pindah dari C:\4Igeneration ke E:\4igeneration (sekali saja)
+
+```bat
+robocopy C:\4Igeneration E:\4igeneration /E /MOVE
+```
+- `/MOVE` = salin lalu hapus dari C: (aman — kalau error, C: tetap utuh)
+- Tanpa `/MOVE` = C: tetap utuh, E: jadi salinan
+
+**Lalu buat ulang environment Python** (path absolut lama tidak berlaku):
+```bat
+cd E:\4igeneration\apps\ai-training
+rmdir /s /q .venv
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+```
+
+> Script `.bat` (sync-pc.bat, start-ai-service.bat, dll) otomatis memakai
+> lokasinya sendiri — tinggal double-click dari `E:\4igeneration`.
 
 ---
 
@@ -24,8 +50,8 @@ python --version
 
 Buka CMD, lalu:
 ```bat
-git clone -b arena/01a02969-4igeneration https://github.com/andiagilrachman/4IGeneration.git C:\4Igeneration
-cd C:\4Igeneration
+git clone -b arena/01a02969-4igeneration https://github.com/andiagilrachman/4IGeneration.git E:\4igeneration
+cd E:\4igeneration
 sync-pc.bat
 ```
 Script akan: checkout branch kerja → buat `.venv` → install dependensi →
@@ -34,7 +60,7 @@ menawarkan menjalankan pipeline.
 > ⚠️ **Sudah terlanjur clone tanpa `-b`?** (kamu di branch `main` sehingga
 > `sync-pc.bat` tidak ada) — cukup jalankan ini di folder yang sudah ada:
 > ```bat
-> cd C:\4Igeneration
+> cd E:\4igeneration
 > git fetch origin
 > git checkout arena/01a02969-4igeneration
 > sync-pc.bat
@@ -42,13 +68,13 @@ menawarkan menjalankan pipeline.
 
 ## Cara 2 — Sudah pernah clone sebelumnya
 
-Tinggal **double-click `C:\4Igeneration\sync-pc.bat`** — dia otomatis
+Tinggal **double-click `E:\4igeneration\sync-pc.bat`** — dia otomatis
 `git pull` update terbaru + pastikan environment tetap sehat.
 
 ## Cara 3 — Dari nol tanpa CMD (bila mau)
 
 1. Buka https://github.com/andiagilrachman/4IGeneration
-2. Klik **Code → Download ZIP** → ekstrak ke `C:\4Igeneration`
+2. Klik **Code → Download ZIP** → ekstrak ke `E:\4igeneration`
    (catatan: cara ini tidak otomatis update — lebih baik pakai Cara 1)
 3. Buka folder itu → double-click `sync-pc.bat`
 
@@ -58,7 +84,7 @@ Tinggal **double-click `C:\4Igeneration\sync-pc.bat`** — dia otomatis
 
 | Langkah | Aksi |
 |---|---|
-| 1/5 | Clone atau `git pull` repo ke `C:\4Igeneration` (branch `arena/01a02969-4igeneration`) |
+| 1/5 | Clone atau `git pull` repo ke `E:\4igeneration` (branch `arena/01a02969-4igeneration`) |
 | 2/5 | Buat environment Python `.venv` (sekali saja) |
 | 3/5 | Install dependensi (`numpy`, `datasets`, `tokenizers`, `torch`) |
 | 4/5 | Cek apakah data tokens sudah ada |
@@ -66,7 +92,7 @@ Tinggal **double-click `C:\4Igeneration\sync-pc.bat`** — dia otomatis
 
 Setelah selesai, semua perintah manual dijalankan dari:
 ```bat
-cd C:\4Igeneration\apps\ai-training
+cd E:\4igeneration\apps\ai-training
 ```
 
 ---
@@ -74,7 +100,7 @@ cd C:\4Igeneration\apps\ai-training
 ## Langkah pertama yang disarankan di PC-mu
 
 ```bat
-cd C:\4Igeneration\apps\ai-training
+cd E:\4igeneration\apps\ai-training
 python pipeline.py --steps corpus,build,tokenizer,pack
 ```
 - Mengunduh **6 sumber corpus teks manusia** (Wikipedia ID, FineWeb-2, Aya,
@@ -106,6 +132,6 @@ dan mau dijadikan resmi, merge branch ini ke `main` lewat GitHub (Pull Request).
 
 Seminggu sekali (atau setelah saya selesaikan tahap baru):
 ```bat
-C:\4Igeneration\sync-pc.bat
+E:\4igeneration\sync-pc.bat
 ```
 pilih **C** (tanpa menjalankan pipeline) — kode selalu terbaru.
