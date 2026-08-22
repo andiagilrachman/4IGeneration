@@ -7,6 +7,27 @@
 
 ---
 
+## 🚫 PRINSIP DATA (TIDAK BOLEH DILANGGAR)
+
+**Dilarang keras: data yang dihasilkan LLM lain (Gemini/GPT/Claude/dll).**
+
+Alasan:
+1. **Ilmiah** — *model collapse* (Shumailov et al., Nature 2024): model yang dilatih dengan
+   output model lain makin repetitif, kehilangan keragaman, melupakan distribusi data asli.
+2. **Kontrak (ToS)** — OpenAI/Google/Anthropic melarang output-nya dipakai untuk membangun
+   model yang bersaing. 4IG-Finance berpotensi bersaing → berisiko.
+3. **Filosofi** — "model sendiri" harus lahir dari data nyata, bukan salinan model lain.
+
+Yang **boleh**:
+- ✅ Data fundamental real (yfinance/IDX) → dirangkai template deterministik (bukan LLM)
+- ✅ Teks buatan manusia: Wikipedia, laporan tahunan, artikel, buku, korpus riset
+- ✅ Q&A **ditulis manual** (kamu/komunitas/penasihat) — kualitas > kuantitas
+- ✅ Evaluasi: bank soal buatan manusia
+
+*Template dari data real itu sah — yang dilarang hanya teks yang *dihasilkan* model AI lain.*
+
+---
+
 ## 🗺️ Ringkasan 6 Tahap
 
 | Tahap | Nama | Deliverable | DoD (harus bisa dibuktikan) |
@@ -36,13 +57,13 @@ python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
 ```
 
 ### TAHAP 1 — DATA (80% pekerjaan) 🚧
-- [ ] **1a. Corpus pretraining** (belajar bahasa + istilah saham):
-  - `build_pretrain_corpus.py` — input: file .txt/.md/.csv apa pun (laporan tahunan, artikel edukasi, berita pasar)
-  - Opsional: download corpus publik ID (OSCAR-id, Wikipedia ID, IndoNews) via HuggingFace `datasets`
+- [ ] **1a. Corpus pretraining** (belajar bahasa + istilah saham) — **HANYA teks manusia**:
+  - `build_pretrain_corpus.py` — input: file .txt/.md/.csv apa pun (laporan tahunan IDX, artikel edukasi, berita pasar)
+  - Opsional: corpus publik ID via HuggingFace `datasets` (Wikipedia ID, OSCAR-id, IndoNews — semua teks manusia)
   - Target: 0.5–2 GB teks bersih
-- [ ] **1b. Dataset Pemahaman** (±50–100K Q&A): definisi PE/PBV/ROE/DER, cara baca laporan keuangan, penjelasan sektor IDX
-- [ ] **1c. Dataset Penilaian** (±20–50K): valuasi per saham dari data fundamental (angka real, label murah/wajar/premium vs sektor)
-- [ ] **1d. Dataset Rekomendasi** (±10–30K): format jawaban data → analisis → risiko → kesimpulan edukatif → disclaimer
+- [ ] **1b. Dataset Pemahaman** (±50–100K Q&A): definisi PE/PBV/ROE/DER, cara baca laporan keuangan, penjelasan sektor IDX — template dari referensi + **ditulis manual**
+- [ ] **1c. Dataset Penilaian** (±20–50K): valuasi per saham dari data fundamental (angka real, label murah/wajar/premium vs sektor) — **template deterministik dari angka real** (✅ sudah jalan)
+- [ ] **1d. Dataset Rekomendasi** (±10–30K): format jawaban data → analisis → risiko → kesimpulan edukatif → disclaimer — template dari data real + pedoman format manual
 - [ ] **1e. Validasi**: `validate_dataset.py` PASS + sampling manual 10%
 
 **Cara cek**:
@@ -90,9 +111,11 @@ curl http://localhost:8000/internal/v1/providers/status  # → 4IG-Finance aktif
 |---|---|---|
 | GPU RTX 4090 sewa (RunPod ~$0.34/jam) | $25–200 | Tahap 2 (3–21 hari) |
 | SFT + DPO | $10–30 | Tahap 3–4 (2–4 hari) |
-| Dataset sintetis (opsional API Gemini) | $20–50 | Tahap 1 |
 | Deploy | $10–30/bulan | Tahap 5 |
 | **Total sekali jalan** | **± Rp 1–5 juta** | **± 6–8 minggu kerja bertahap** |
+
+> Catatan: tanpa generator sintetis LLM, biaya Tahap 1 tinggal waktu & tenaga
+> (pengumpulan corpus + penulisan Q&A manual) — tidak ada biaya API.
 
 ---
 

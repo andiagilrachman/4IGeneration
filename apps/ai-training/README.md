@@ -3,6 +3,17 @@
 > LLM khusus saham Indonesia: **Pemahaman · Penilaian · Rekomendasi** (edukatif).
 > Peta lengkap: [`docs/BUILD-LLM-TAHAPAN.md`](../../docs/BUILD-LLM-TAHAPAN.md)
 
+## 🚫 Prinsip Data
+
+**DILARANG memakai data yang dihasilkan LLM lain** (Gemini/GPT/Claude/dll) untuk training:
+- Risiko *model collapse* (Shumailov et al., Nature 2024)
+- Klausul ToS provider (output tidak boleh untuk model bersaing)
+
+Yang dipakai **hanya**:
+- Data fundamental real → template deterministik (bukan LLM)
+- Teks buatan manusia (Wikipedia ID, laporan tahunan, artikel, buku)
+- Q&A ditulis manual
+
 ## Struktur
 
 ```
@@ -41,4 +52,4 @@ python3 stage1_data/build_pretrain_corpus.py --input-dir ./data/raw_corpus --out
 ```
 
 > Dataset produksi (50–100K contoh) dibuat dengan memperluas data fundamental
-> historis + generator sintetis LLM (opsional, butuh `GEMINI_API_KEY`).
+> historis + penulisan Q&A manual (DILARANG pakai output LLM lain — lihat Prinsip Data).
