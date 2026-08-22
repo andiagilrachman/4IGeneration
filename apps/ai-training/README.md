@@ -1,0 +1,44 @@
+# 🧠 apps/ai-training — Bangun LLM 4IG-Finance (dari nol)
+
+> LLM khusus saham Indonesia: **Pemahaman · Penilaian · Rekomendasi** (edukatif).
+> Peta lengkap: [`docs/BUILD-LLM-TAHAPAN.md`](../../docs/BUILD-LLM-TAHAPAN.md)
+
+## Struktur
+
+```
+apps/ai-training/
+├── configs/               # Konfigurasi arsitektur model (300M / 1.1B)
+├── stage1_data/           # TAHAP 1 — builder dataset
+│   ├── build_pretrain_corpus.py   # corpus pretraining (teks bebas)
+│   ├── build_sft_dataset.py       # dataset 3 kemampuan (dari data fundamental)
+│   └── validate_dataset.py        # validasi format/duplikat/disclaimer
+├── stage2_tokenizer/      # TAHAP 2 — (belum dibuat)
+├── stage3_sft/            # TAHAP 3 — (belum dibuat)
+├── stage4_dpo/            # TAHAP 4 — (belum dibuat)
+├── stage5_deploy/         # TAHAP 5 — (belum dibuat)
+└── data/                  # hasil dataset (git-ignored)
+```
+
+## Setup
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+## Tahap 1 — Build dataset
+
+```bash
+# 1) Dataset SFT 3 kemampuan dari data fundamental saham IDX (offline, pakai demo_data)
+python3 stage1_data/build_sft_dataset.py --limit 28 --out data/sft/dataset.jsonl
+
+# 2) Validasi
+python3 stage1_data/validate_dataset.py --in data/sft/dataset.jsonl
+
+# 3) Corpus pretraining dari folder teks
+python3 stage1_data/build_pretrain_corpus.py --input-dir ./data/raw_corpus --out data/pretrain/
+```
+
+> Dataset produksi (50–100K contoh) dibuat dengan memperluas data fundamental
+> historis + generator sintetis LLM (opsional, butuh `GEMINI_API_KEY`).

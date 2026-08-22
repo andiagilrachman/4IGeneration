@@ -1,0 +1,19 @@
+# apps/ai-training — minimal dependencies (instal bertahap per tahap)
+# Tahap 1 (data)
+numpy>=1.26
+
+# Tahap 2 (tokenizer & pretrain)
+# sentencepiece>=0.2.0
+# transformers>=4.44
+# torch>=2.3
+
+# Tahap 3 (SFT)
+# peft>=0.12
+# bitsandbytes>=0.43
+# datasets>=2.20
+
+# Tahap 4 (DPO)
+# trl>=0.9
+
+# Opsional: download corpus publik (OSCAR-id, Wikipedia ID, dll)
+# datasets>=2.20

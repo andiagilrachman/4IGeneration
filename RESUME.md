@@ -75,6 +75,7 @@
 ## 📓 Log Pekerjaan (terbaru di atas)
 
 <!-- LOG-START -->
+| 2026-08-22 | feat: mulai bangun LLM sendiri 4IG-Finance (dari nol) — Tahap 0-1: scaffold `apps/ai-training/` (configs 300M/1.1B, builder corpus pretraining, builder dataset SFT 3 kemampuan pemahaman/penilaian/rekomendasi, validator) + peta tahapan `docs/BUILD-LLM-TAHAPAN.md`; pipeline data teruji (69 contoh PASS, disclaimer 100%) | ✅ Selesai | Tahap 1 — Data |
 | 2026-08-10 | docs: sesuaikan panduan & script Windows pakai user root XAMPP default (tanpa password) + opsi pilih DB di setup.bat | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | docs: panduan install Windows + setup.bat + start-all.bat — jalankan project di komputer sendiri dengan XAMPP | ✅ Selesai | auto (post-commit hook) |
 | 2026-08-10 | chore(env): betulkan konfigurasi database di root .env.example — MYSQL_DATABASE jadi nama db saja, tambah DATABASE_URL & REDIS_URL konsisten (4ig/4ig_pass), bersihkan artefak link | ✅ Selesai | auto (post-commit hook) |
